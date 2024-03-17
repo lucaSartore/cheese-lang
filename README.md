@@ -111,7 +111,7 @@ Milk d = fresh;
  - `m_to_g(Mozzarella m) -> Gorgonzola, Milk` (converts a `Mozzarella` to a `Gorgonzola`, and return a milk to represent if the conversion was successful)
 
 #### input/output
- - `prepare() -> Mozzarella` (reads a line from the standard input)
+ - `eat() -> Mozzarella` (reads a line from the standard input)
  - `serve(Mozzarella m)` (prints a string to the standard output)
 
 #### Mozzarella manipulation

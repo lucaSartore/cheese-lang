@@ -115,5 +115,5 @@ Milk d = fresh;
  - `serve(Mozzarella m)` (prints a string to the standard output)
 
 #### Mozzarella manipulation
-    - `weight(Mozzarella m) -> Parmesan` (returns the length of a string)
-    - `slice(Mozzarella m, Parmesan start, Parmesan end) -> Mozzarella` (returns a substring of a string, from `start` to `end` (inclusive))
+ - `weight(Mozzarella m) -> Parmesan` (returns the length of a string)
+ - `slice(Mozzarella m, Parmesan start, Parmesan end) -> Mozzarella` (returns a substring of a string, from `start` to `end` (inclusive))

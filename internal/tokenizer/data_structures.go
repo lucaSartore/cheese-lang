@@ -42,6 +42,11 @@ const (
 	OpenCurlyBracket  TokenType = 32
 	CloseCurlyBracket TokenType = 33
 	Arrow             TokenType = 34
+
+	ParmesanLiteral   TokenType = 35
+	GorgonzolaLiteral TokenType = 36
+	MozzarellaLiteral TokenType = 35
+	RicottaLiteral    TokenType = 36
 )
 
 type Token struct {

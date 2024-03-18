@@ -29,15 +29,19 @@ const (
 	LessOperator         TokenType = 20
 	GreaterEqualOperator TokenType = 21
 	LessEqualOperator    TokenType = 22
+	NotOperator          TokenType = 23
+	AndOperator          TokenType = 24
+	OrOperator           TokenType = 25
+	ExorOperator         TokenType = 26
 
-	Comment           TokenType = 23
-	SemiColon         TokenType = 24
-	Comma             TokenType = 25
-	OpenBracket       TokenType = 26
-	CloseBracket      TokenType = 27
-	OpenCurlyBracket  TokenType = 28
-	CloseCurlyBracket TokenType = 29
-	Arrow             TokenType = 30
+	Comment           TokenType = 27
+	SemiColon         TokenType = 28
+	Comma             TokenType = 29
+	OpenBracket       TokenType = 30
+	CloseBracket      TokenType = 31
+	OpenCurlyBracket  TokenType = 32
+	CloseCurlyBracket TokenType = 33
+	Arrow             TokenType = 34
 )
 
 type Token struct {

@@ -99,7 +99,10 @@ Milk d = fresh;
 - `Ricotta`:
     - `==` (equality)
     - `!=` (inequality)
-
+    - `!` (negation)
+    - `&&` (and)
+    - `||` (or)
+    - `^` (exor)
 ### standard library
 
 #### type conversion

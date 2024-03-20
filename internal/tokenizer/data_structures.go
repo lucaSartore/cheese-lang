@@ -3,6 +3,8 @@ package tokenizer
 type TokenType int
 
 const (
+	NullToken TokenType = -1
+
 	Identifier TokenType = 0
 
 	ParmesanType   TokenType = 1
@@ -52,4 +54,18 @@ const (
 type Token struct {
 	TokenType TokenType
 	TokenVal  string
+}
+
+func MakeToken(t TokenType) Token {
+	return Token{
+		t,
+		"",
+	}
+}
+
+func MakeTokenWithMessage(t TokenType, v string) Token {
+	return Token{
+		t,
+		v,
+	}
 }

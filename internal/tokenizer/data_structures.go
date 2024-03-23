@@ -47,9 +47,92 @@ const (
 
 	ParmesanLiteral   TokenType = 35
 	GorgonzolaLiteral TokenType = 36
-	MozzarellaLiteral TokenType = 35
-	RicottaLiteral    TokenType = 36
+	MozzarellaLiteral TokenType = 37
+	RicottaLiteral    TokenType = 38
 )
+
+func (t TokenType) String() string {
+	switch t {
+	case ParmesanType:
+		return "ParmesanType"
+	case GorgonzolaType:
+		return "GorgonzolaType"
+	case MozzarellaType:
+		return "MozzarellaType"
+	case MilkType:
+		return "MilkType"
+	case RicottaType:
+		return "RicottaType"
+	case TasteKeyword:
+		return "TasteKeyword"
+	case RecipeKeyword:
+		return "RecipeKeyword"
+	case PrepareKeyword:
+		return "PrepareKeyword"
+	case CurdleKeyword:
+		return "CurdleKeyword"
+	case DrainKeyword:
+		return "DrainKeyword"
+	case AssignOperator:
+		return "AssignOperator"
+	case EqualOperator:
+		return "EqualOperator"
+	case UnEqualOperator:
+		return "UnEqualOperator"
+	case AddOperator:
+		return "AddOperator"
+	case SubOperator:
+		return "SubOperator"
+	case DivOperator:
+		return "DivOperator"
+	case MulOperator:
+		return "MulOperator"
+	case ModOperator:
+		return "ModOperator"
+	case GreaterOperator:
+		return "GreaterOperator"
+	case LessOperator:
+		return "LessOperator"
+	case GreaterEqualOperator:
+		return "GreaterEqualOperator"
+	case LessEqualOperator:
+		return "LessEqualOperator"
+	case NotOperator:
+		return "NotOperator"
+	case AndOperator:
+		return "AndOperator"
+	case OrOperator:
+		return "OrOperator"
+	case ExorOperator:
+		return "ExorOperator"
+	case Comment:
+		return "Comment"
+	case SemiColon:
+		return "SemiColon"
+	case Comma:
+		return "Comma"
+	case OpenBracket:
+		return "OpenBracket"
+	case CloseBracket:
+		return "CloseBracket"
+	case OpenCurlyBracket:
+		return "OpenCurlyBracket"
+	case CloseCurlyBracket:
+		return "CloseCurlyBracket"
+	case Arrow:
+		return "Arrow"
+	case ParmesanLiteral:
+		return "ParmesanLiteral"
+	case GorgonzolaLiteral:
+		return "GorgonzolaLiteral"
+	case MozzarellaLiteral:
+		return "MozzarellaLiteral"
+	case RicottaLiteral:
+		return "RicottaLiteral"
+	default:
+		return "Unknown"
+	}
+}
 
 type Token struct {
 	TokenType TokenType

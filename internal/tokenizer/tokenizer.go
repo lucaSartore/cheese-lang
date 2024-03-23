@@ -3,6 +3,7 @@ package tokenizer
 import (
 	"bytes"
 	"errors"
+	"strings"
 )
 
 func Tokenize(input string) ([]Token, error) {
@@ -146,4 +147,26 @@ func TryReadComment(input []byte) (Token, uint) {
 		}
 	}
 	return MakeTokenWithMessage(Comment, string(input[2:count-1])), count
+}
+
+func TryReadKeyword(input []byte) (Token, uint) {
+	str := string(input)
+
+	type KeyWordOption struct {
+		keyword string
+		token   TokenType
+	}
+
+	options := []KeyWordOption{
+		{},
+		{},
+	}
+
+	for _, option := range options {
+
+		if strings.HasPrefix(str, option.keyword) {
+			return MakeToken(option.token), uint(len(option.keyword))
+		}
+	}
+	return MakeToken(NullToken), 0
 }

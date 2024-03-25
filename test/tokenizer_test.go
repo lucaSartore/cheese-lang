@@ -28,6 +28,30 @@ func TestTokenizer1(t *testing.T) {
 		tokenizer.MakeToken(tokenizer.AssignOperator),
 	}
 
+	VerityTokens(tokens, expected_tokens, t)
+}
+
+func TestTokenizer2(t *testing.T) {
+	s := "   mozzarella gorgonzola 	\"literal\" \"literal\\n \\\\ \\t \\\"\""
+
+	tokens, err := tokenizer.Tokenize(s)
+
+	if err != nil {
+		t.Error(err)
+	}
+
+	expected_tokens := []tokenizer.Token{
+		tokenizer.MakeToken(tokenizer.MozzarellaType),
+		tokenizer.MakeToken(tokenizer.GorgonzolaType),
+		tokenizer.MakeTokenWithMessage(tokenizer.MozzarellaLiteral, "literal"),
+		tokenizer.MakeTokenWithMessage(tokenizer.MozzarellaLiteral, "literal\n \\ \t \""),
+	}
+
+	VerityTokens(tokens, expected_tokens, t)
+}
+
+func VerityTokens(tokens []tokenizer.Token, expected_tokens []tokenizer.Token, t *testing.T) {
+
 	for i, token := range tokens {
 		if token.TokenType != expected_tokens[i].TokenType {
 			t.Errorf("Expected token type %v, got %v", expected_tokens[i].TokenType, token.TokenType)

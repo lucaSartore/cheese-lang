@@ -35,7 +35,7 @@ func TokenizeSingle(input *bytes.Buffer) (Token, error) {
 	}
 	inputBytes := input.Bytes()
 
-	functionToTry := []func([]byte) (Token, uint){AdvanceWitheSpace, TryReadComment, TryReadDualCharacterToken, TryReadSingleCharacterToken}
+	functionToTry := []func([]byte) (Token, uint){AdvanceWitheSpace, TryReadComment, TryReadDualCharacterToken, TryReadSingleCharacterToken, TryReadKeyword, TryReadMozzarellaLiteral}
 	for _, function := range functionToTry {
 		token, len := function(inputBytes)
 		if len > 0 {
@@ -158,15 +158,87 @@ func TryReadKeyword(input []byte) (Token, uint) {
 	}
 
 	options := []KeyWordOption{
-		{},
-		{},
+		{"mozzarella", MozzarellaType},
+		{"parmesan", ParmesanType},
+		{"gorgonzola", GorgonzolaType},
+		{"ricotta", RicottaType},
+		{"taste", TasteKeyword},
+		{"recipe", RecipeKeyword},
+		{"prepare", PrepareKeyword},
+		{"curdle", CurdleKeyword},
+		{"drain", DrainKeyword},
 	}
 
 	for _, option := range options {
-
 		if strings.HasPrefix(str, option.keyword) {
 			return MakeToken(option.token), uint(len(option.keyword))
 		}
 	}
 	return MakeToken(NullToken), 0
+}
+
+func TryReadMozzarellaLiteral(input []byte) (Token, uint) {
+	if len(input) < 2 {
+		return MakeToken(NullToken), 0
+	}
+
+	if input[0] != '"' {
+		return MakeToken(NullToken), 0
+	}
+
+	character_counter := uint(1)
+
+	result := []byte{}
+
+	terminated_correctly := false
+	skip_one := false
+
+mozzarella_literal_loop:
+	for i, c := range input[1:] {
+
+		character_counter++
+
+		if skip_one {
+			skip_one = false
+			continue
+		}
+
+		if c == '"' {
+			terminated_correctly = true
+			break
+		}
+
+		if c == '\n' {
+			break
+		}
+
+		if c == '\\' {
+			if len(input) <= i+2 {
+				break
+			}
+			next_char := input[i+2]
+			switch next_char {
+			case '\\':
+				result = append(result, '\\')
+			case 't':
+				result = append(result, '\t')
+			case 'n':
+				result = append(result, '\n')
+			case '"':
+				result = append(result, '"')
+			default:
+				break mozzarella_literal_loop
+			}
+
+			skip_one = true
+		} else {
+			result = append(result, c)
+		}
+	}
+
+	if !terminated_correctly {
+		return MakeToken(NullToken), 0
+	}
+
+	return MakeTokenWithMessage(MozzarellaLiteral, string(result)), character_counter
 }

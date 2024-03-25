@@ -242,3 +242,38 @@ mozzarella_literal_loop:
 
 	return MakeTokenWithMessage(MozzarellaLiteral, string(result)), character_counter
 }
+
+func TryReadGorgonzolaOrParmesanLiteral(input []byte) (Token, uint) {
+
+	chars := []byte{}
+
+	found_separator := false
+
+	for i, b := range input {
+
+		if b >= '0' && b <= '9' {
+			chars = append(chars, b)
+		} else if i != 0 && b == '.' && !found_separator {
+			// the decimal separator can't be the first character
+			// and there can be at most one decimal separator in each literal
+			chars = append(chars, b)
+			found_separator = true
+		} else {
+			return MakeToken(NullToken), 0
+		}
+	}
+
+	// make sore the last pushed value is sot the decimal separator
+	if chars[len(chars)-1] == '.' {
+		return MakeToken(NullToken), 0
+	}
+
+	message := string(chars)
+	len := uint(len(chars))
+
+	if found_separator {
+		return MakeTokenWithMessage(GorgonzolaLiteral, message), len
+	} else {
+		return MakeTokenWithMessage(ParmesanLiteral, message), len
+	}
+}

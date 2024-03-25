@@ -133,9 +133,9 @@ func TryReadComment(input []byte) (Token, uint) {
 		return MakeToken(NullToken), 0
 	}
 
-	text := string(input[0:1])
+	text := string(input[0:2])
 
-	if text != "\\" {
+	if text != "\\\\" {
 		return MakeToken(NullToken), 0
 	}
 	count := uint(2)

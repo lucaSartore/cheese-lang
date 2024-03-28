@@ -3,7 +3,7 @@ package tokenizer
 import (
 	"bytes"
 	"errors"
-	"strings"
+	"regexp"
 )
 
 func Tokenize(input string) ([]Token, error) {
@@ -149,34 +149,6 @@ func TryReadComment(input []byte) (Token, uint) {
 	return MakeTokenWithMessage(Comment, string(input[2:count-1])), count
 }
 
-func TryReadKeyword(input []byte) (Token, uint) {
-	str := string(input)
-
-	type KeyWordOption struct {
-		keyword string
-		token   TokenType
-	}
-
-	options := []KeyWordOption{
-		{"mozzarella", MozzarellaType},
-		{"parmesan", ParmesanType},
-		{"gorgonzola", GorgonzolaType},
-		{"ricotta", RicottaType},
-		{"taste", TasteKeyword},
-		{"recipe", RecipeKeyword},
-		{"prepare", PrepareKeyword},
-		{"curdle", CurdleKeyword},
-		{"drain", DrainKeyword},
-	}
-
-	for _, option := range options {
-		if strings.HasPrefix(str, option.keyword) {
-			return MakeToken(option.token), uint(len(option.keyword))
-		}
-	}
-	return MakeToken(NullToken), 0
-}
-
 func TryReadMozzarellaLiteral(input []byte) (Token, uint) {
 	if len(input) < 2 {
 		return MakeToken(NullToken), 0
@@ -275,5 +247,57 @@ func TryReadGorgonzolaOrParmesanLiteral(input []byte) (Token, uint) {
 		return MakeTokenWithMessage(GorgonzolaLiteral, message), len
 	} else {
 		return MakeTokenWithMessage(ParmesanLiteral, message), len
+	}
+}
+
+func IsValidKeywordStartChar(c byte) bool {
+	return regexp.MustCompile("^[a-zA-Z_]*$").Match([]byte{c})
+}
+
+func IsValidKeywordChar(c byte) bool {
+	return regexp.MustCompile("^[a-zA-Z0-9_]*$").Match([]byte{c})
+}
+
+func TryReadKeyword(input []byte) (Token, uint) {
+
+	if len(input) == 0 {
+		return MakeToken(NullToken), 0
+	}
+	if !IsValidKeywordStartChar(input[0]) {
+		return MakeToken(NullToken), 0
+	}
+
+	keyword_length := uint(0)
+
+	for _, c := range input {
+		if !IsValidKeywordStartChar(c) {
+			break
+		}
+		keyword_length++
+	}
+
+	keyword := string(input[0:keyword_length])
+
+	switch keyword {
+	case "mozzarella":
+		return MakeToken(MozzarellaType), keyword_length
+	case "parmesan":
+		return MakeToken(ParmesanType), keyword_length
+	case "gorgonzola":
+		return MakeToken(GorgonzolaType), keyword_length
+	case "ricotta":
+		return MakeToken(RicottaType), keyword_length
+	case "taste":
+		return MakeToken(TasteKeyword), keyword_length
+	case "recipe":
+		return MakeToken(RecipeKeyword), keyword_length
+	case "prepare":
+		return MakeToken(PrepareKeyword), keyword_length
+	case "curdle":
+		return MakeToken(CurdleKeyword), keyword_length
+	case "drain":
+		return MakeToken(DrainKeyword), keyword_length
+	default:
+		return MakeTokenWithMessage(Identifier, keyword), keyword_length
 	}
 }

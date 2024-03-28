@@ -48,7 +48,8 @@ const (
 	ParmesanLiteral   TokenType = 35
 	GorgonzolaLiteral TokenType = 36
 	MozzarellaLiteral TokenType = 37
-	RicottaLiteral    TokenType = 38
+	SpoiledMilk       TokenType = 38
+	FreshMilk         TokenType = 39
 )
 
 func (t TokenType) String() string {
@@ -127,8 +128,6 @@ func (t TokenType) String() string {
 		return "GorgonzolaLiteral"
 	case MozzarellaLiteral:
 		return "MozzarellaLiteral"
-	case RicottaLiteral:
-		return "RicottaLiteral"
 	default:
 		return "Unknown"
 	}

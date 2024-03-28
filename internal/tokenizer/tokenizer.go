@@ -40,7 +40,6 @@ func TokenizeSingle(input *bytes.Buffer) (Token, error) {
 		TryReadComment,
 		TryReadDualCharacterToken,
 		TryReadSingleCharacterToken,
-		TryReadKeyword,
 		TryReadMozzarellaLiteral,
 		TryReadGorgonzolaOrParmesanLiteral,
 		TryReadKeyword,
@@ -145,7 +144,7 @@ func TryReadComment(input []byte) (Token, uint) {
 
 	text := string(input[0:2])
 
-	if text != "\\\\" {
+	if text != "//" {
 		return MakeToken(NullToken), 0
 	}
 	count := uint(2)
@@ -241,8 +240,12 @@ func TryReadGorgonzolaOrParmesanLiteral(input []byte) (Token, uint) {
 			chars = append(chars, b)
 			found_separator = true
 		} else {
-			return MakeToken(NullToken), 0
+			break
 		}
+	}
+
+	if len(chars) == 0 {
+		return MakeToken(NullToken), 0
 	}
 
 	// make sore the last pushed value is sot the decimal separator
@@ -289,13 +292,13 @@ func TryReadKeyword(input []byte) (Token, uint) {
 	keyword := string(input[0:keyword_length])
 
 	switch keyword {
-	case "mozzarella":
+	case "Mozzarella":
 		return MakeToken(MozzarellaType), keyword_length
-	case "parmesan":
+	case "Parmesan":
 		return MakeToken(ParmesanType), keyword_length
-	case "gorgonzola":
+	case "Gorgonzola":
 		return MakeToken(GorgonzolaType), keyword_length
-	case "ricotta":
+	case "Ricotta":
 		return MakeToken(RicottaType), keyword_length
 	case "taste":
 		return MakeToken(TasteKeyword), keyword_length
@@ -307,6 +310,10 @@ func TryReadKeyword(input []byte) (Token, uint) {
 		return MakeToken(CurdleKeyword), keyword_length
 	case "drain":
 		return MakeToken(DrainKeyword), keyword_length
+	case "spoiled":
+		return MakeToken(FreshMilk), keyword_length
+	case "fresh":
+		return MakeToken(SpoiledMilk), keyword_length
 	default:
 		return MakeTokenWithMessage(Identifier, keyword), keyword_length
 	}

@@ -1,6 +1,7 @@
 package test
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/lucaSartore/cheese-lang/internal/tokenizer"
@@ -48,6 +49,45 @@ func TestTokenizer2(t *testing.T) {
 	}
 
 	VerityTokens(tokens, expected_tokens, t)
+}
+
+func TestTokenizer4(t *testing.T) {
+	s := `
+	
+	//this is a comment
+
+	recipie doSomething(Mozzarella m, Parmesan p, Gorgonzola g) -> Mozzarella, Parmesan, Gorgonzola{
+		prepare m, p, g;
+	}
+
+	recipie main() -> Ricotta{
+		//this is a comment
+		milk MyMilk = spoiled;
+		
+		Mozzarella MyMozzarella = "my mozzarella";
+		Parmesan MyParmesan = 10;
+		Gorgonzola MyGorgonzola = 10.0;
+
+		if(!MyMilk){
+			MyMozerella = MyMozzarella + " is good";
+			MyParmesan = MyParmesan * 10;
+			MyGorgonzola = MyGorgonzola / 10.0;
+		}
+		
+		prepare;		
+	}
+	
+	`
+	tokens, err := tokenizer.Tokenize(s)
+
+	if err != nil {
+		t.Error(err)
+		return
+	}
+
+	fmt.Println(tokens)
+
+	// VerityTokens(tokens, expected_tokens, t)
 }
 
 func VerityTokens(tokens []tokenizer.Token, expected_tokens []tokenizer.Token, t *testing.T) {

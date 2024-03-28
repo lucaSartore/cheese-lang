@@ -35,7 +35,17 @@ func TokenizeSingle(input *bytes.Buffer) (Token, error) {
 	}
 	inputBytes := input.Bytes()
 
-	functionToTry := []func([]byte) (Token, uint){AdvanceWitheSpace, TryReadComment, TryReadDualCharacterToken, TryReadSingleCharacterToken, TryReadKeyword, TryReadMozzarellaLiteral}
+	functionToTry := []func([]byte) (Token, uint){
+		AdvanceWitheSpace,
+		TryReadComment,
+		TryReadDualCharacterToken,
+		TryReadSingleCharacterToken,
+		TryReadKeyword,
+		TryReadMozzarellaLiteral,
+		TryReadGorgonzolaOrParmesanLiteral,
+		TryReadKeyword,
+	}
+
 	for _, function := range functionToTry {
 		token, len := function(inputBytes)
 		if len > 0 {

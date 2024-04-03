@@ -1,3 +1,3 @@
-module github.com/lucaSartore/cheese-lang
+module cheese-lang
 
 go 1.22.0

@@ -1,10 +1,9 @@
 package test
 
 import (
+	"cheese-lang/internal/tokenizer"
 	"fmt"
 	"testing"
-
-	"github.com/lucaSartore/cheese-lang/internal/tokenizer"
 )
 
 func TestTokenizer1(t *testing.T) {

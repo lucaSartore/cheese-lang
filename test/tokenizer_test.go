@@ -56,11 +56,11 @@ func TestTokenizer3(t *testing.T) {
 	
 	//this is a comment
 
-	recipie doSomething(Mozzarella m, Parmesan p, Gorgonzola g) -> Mozzarella, Parmesan, Gorgonzola{
+	recipe doSomething(Mozzarella m, Parmesan p, Gorgonzola g) -> Mozzarella, Parmesan, Gorgonzola{
 		prepare m, p, g;
 	}
 
-	recipie main() -> Ricotta{
+	recipe main() -> Ricotta{
 		//this is a comment
 		Milk MyMilk = spoiled;
 		
@@ -68,7 +68,7 @@ func TestTokenizer3(t *testing.T) {
 		Parmesan MyParmesan = 10;
 		Gorgonzola MyGorgonzola = 10.0;
 
-		if(!MyMilk){
+		taste(!MyMilk){
 			MyMozerella = MyMozzarella + " is good";
 			MyParmesan = MyParmesan * 10;
 			MyGorgonzola = MyGorgonzola / 10.0;

@@ -298,6 +298,8 @@ func TryReadKeyword(input []byte) (Token, uint) {
 		return MakeToken(ParmesanType), keyword_length
 	case "Gorgonzola":
 		return MakeToken(GorgonzolaType), keyword_length
+	case "Milk":
+		return MakeToken(MilkType), keyword_length
 	case "Ricotta":
 		return MakeToken(RicottaType), keyword_length
 	case "taste":
@@ -311,9 +313,9 @@ func TryReadKeyword(input []byte) (Token, uint) {
 	case "drain":
 		return MakeToken(DrainKeyword), keyword_length
 	case "spoiled":
-		return MakeToken(FreshMilk), keyword_length
-	case "fresh":
 		return MakeToken(SpoiledMilk), keyword_length
+	case "fresh":
+		return MakeToken(FreshMilk), keyword_length
 	default:
 		return MakeTokenWithMessage(Identifier, keyword), keyword_length
 	}

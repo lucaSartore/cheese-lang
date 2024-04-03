@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/lucaSartore/cheese-lang/internal/tokenizer"
+	"cheese-lang/internal/tokenizer"
 )
 
 func main() {

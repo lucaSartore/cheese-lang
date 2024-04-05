@@ -12,7 +12,10 @@ type Expression interface {
 // - be a return statement from a function
 // - be a brake statement
 type ExpressionResult struct {
-	Value  parser.Variable
-	Return parser.FunctionReturns
-	Brake  bool
+	Value  *parser.Variable
+	Return *parser.FunctionReturns
+	Brake  *bool
 }
+
+var NullExpressionResult = ExpressionResult{nil, nil, nil}
+var VoidExpressionResult = ExpressionResult{&parser.NullVariable, nil, nil}

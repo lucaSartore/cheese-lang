@@ -70,7 +70,8 @@ func (*RicottaVariable) GetVariableType() VariableType {
 }
 
 type Variable struct {
+	Name  string
 	Value VariableContainer
 }
 
-var NullVariable = Variable{&RicottaVariable{}}
+var NullVariable = Variable{"", &RicottaVariable{}}

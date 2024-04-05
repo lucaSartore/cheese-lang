@@ -1,6 +1,6 @@
-# cheese-lang-&#129472;
+# &#129472; &#129472; &#129472; cheese-lang (Linguaggio Formaggio) &#129472; &#129472; &#129472; 
 
-cheese-lang is a statically typed, interpreted language with a runtime
+cheese-lang (or Linguaggio Formaggio in Italian)is a statically typed, interpreted language with a runtime
 written in go.
 
 ## Language specification

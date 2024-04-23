@@ -7,18 +7,18 @@ import (
 // a code expression is a list of expressions that are evaluated in order
 
 type CodeExpression struct {
-	Expressions []Expression
+	Expressions []parser.Expression
 }
 
-func (ce *CodeExpression) Evaluate(globalContext *parser.Context, localContext *parser.Context) (ExpressionResult, error) {
-	lastResult := VoidExpressionResult
+func (ce *CodeExpression) Evaluate(globalContext *parser.Context, localContext *parser.Context) (parser.ExpressionResult, error) {
+	lastResult := parser.VoidExpressionResult
 
 	for _, exp := range ce.Expressions {
 
 		lastResult, err := exp.Evaluate(globalContext, localContext)
 
 		if err != nil {
-			return NullExpressionResult, nil
+			return parser.NullExpressionResult, nil
 		}
 
 		if lastResult.Return != nil || lastResult.Brake != nil {

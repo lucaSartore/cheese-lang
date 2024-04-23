@@ -1,10 +1,8 @@
-package expressions
-
-import "cheese-lang/internal/parser"
+package parser
 
 type Expression interface {
 	// Evaluate the expression
-	Evaluate(globalContext *parser.Context, localContext *parser.Context) (ExpressionResult, error)
+	Evaluate(globalContext *Context, localContext *Context) (ExpressionResult, error)
 }
 
 // when an expression is evaluated it euther:
@@ -12,10 +10,10 @@ type Expression interface {
 // - be a return statement from a function
 // - be a brake statement
 type ExpressionResult struct {
-	Value  *parser.Variable
-	Return *parser.FunctionReturns
+	Value  *VariableContainer
+	Return *FunctionReturns
 	Brake  *bool
 }
 
 var NullExpressionResult = ExpressionResult{nil, nil, nil}
-var VoidExpressionResult = ExpressionResult{&parser.NullVariable, nil, nil}
+var VoidExpressionResult = ExpressionResult{&NullVariable, nil, nil}

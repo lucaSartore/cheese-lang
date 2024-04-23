@@ -10,13 +10,13 @@ type CuddleExpression struct {
 	codeInside CodeExpression
 }
 
-func (ce *CuddleExpression) Evaluate(globalContext *parser.Context, localContext *parser.Context) (ExpressionResult, error) {
+func (ce *CuddleExpression) Evaluate(globalContext *parser.Context, localContext *parser.Context) (parser.ExpressionResult, error) {
 
 	for {
 		result, err := ce.codeInside.Evaluate(globalContext, localContext)
 
 		if err != nil {
-			return NullExpressionResult, err
+			return parser.NullExpressionResult, err
 		}
 
 		if result.Return != nil {

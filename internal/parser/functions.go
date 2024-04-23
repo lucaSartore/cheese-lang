@@ -4,11 +4,7 @@ type Function struct {
 	Name          string
 	ArgumentsType []VariableType
 	ReturnType    []VariableType
-}
-
-type FunctionArg struct {
-	Name  string
-	Value Variable
+	Code          Expression
 }
 
 type FunctionReturns struct {

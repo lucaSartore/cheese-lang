@@ -8,6 +8,7 @@ const (
 	Parmesan   VariableType = 2
 	Milk       VariableType = 3
 	Ricotta    VariableType = 4
+	Tuple      VariableType = 5
 )
 
 func (v VariableType) String() string {
@@ -22,6 +23,8 @@ func (v VariableType) String() string {
 		return "Milk"
 	case Ricotta:
 		return "Ricotta"
+	case Tuple:
+		return "Tuple"
 	default:
 		panic("Run Time Panic: variable type unsupported")
 	}
@@ -69,9 +72,17 @@ func (*RicottaVariable) GetVariableType() VariableType {
 	return Ricotta
 }
 
+type TupleVariableType struct {
+	Variables Variable
+}
+
+func (*TupleVariableType) GetVariableType() VariableType {
+	return Tuple
+}
+
 type Variable struct {
 	Name  string
 	Value VariableContainer
 }
 
-var NullVariable = Variable{"", &RicottaVariable{}}
+var NullVariable VariableContainer = &RicottaVariable{}

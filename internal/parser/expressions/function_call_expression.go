@@ -11,6 +11,8 @@ import (
 type FunctionCallExpression struct {
 	functionToCall string
 	args           []string
+	argsTypes []parser.VariableType
+	variablesPassed []string
 }
 
 func (fc *FunctionCallExpression) Evaluate(globalContext *parser.Context, localContext *parser.Context) (parser.ExpressionResult, error) {
@@ -20,5 +22,10 @@ func (fc *FunctionCallExpression) Evaluate(globalContext *parser.Context, localC
 	if !ok {
 		return parser.NullExpressionResult, errors.New(fmt.Sprintf("unable to find the function: %s", fc.functionToCall))
 	}
+
+
+	var newLocalContext = parser.MakeContext()
+
+	for _, 
 
 }

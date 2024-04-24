@@ -73,7 +73,7 @@ func (*RicottaVariable) GetVariableType() VariableType {
 }
 
 type TupleVariableType struct {
-	Variables Variable
+	Variables []VariableContainer
 }
 
 func (*TupleVariableType) GetVariableType() VariableType {
@@ -85,4 +85,5 @@ type Variable struct {
 	Value VariableContainer
 }
 
-var NullVariable VariableContainer = &RicottaVariable{}
+var NullVariableContainer VariableContainer = &RicottaVariable{}
+var NullVariable = Variable{"", NullVariableContainer}

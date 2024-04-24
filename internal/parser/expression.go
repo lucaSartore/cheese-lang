@@ -16,4 +16,4 @@ type ExpressionResult struct {
 }
 
 var NullExpressionResult = ExpressionResult{nil, nil, nil}
-var VoidExpressionResult = ExpressionResult{&NullVariable, nil, nil}
+var VoidExpressionResult = ExpressionResult{&NullVariableContainer, nil, nil}

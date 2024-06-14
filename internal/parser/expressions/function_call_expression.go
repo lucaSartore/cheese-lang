@@ -46,8 +46,9 @@ func (fc *FunctionCallExpression) Evaluate(globalContext *parser.Context, localC
 			return parser.NullExpressionResult, fmt.Errorf(
 				"expected type %s for argument %d got type %s instead",
 				expected_type.String(),
+				i,
 				value_type.String(),
-				i)
+			)
 		}
 
 		newLocalContext.Variables[arg_name] = parser.MakeVariable(arg_name, value.Value)

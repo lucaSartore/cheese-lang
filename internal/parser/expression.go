@@ -15,5 +15,8 @@ type ExpressionResult struct {
 	Brake  *bool
 }
 
+// null expression result is used as a null value when you need to return an error
 var NullExpressionResult = ExpressionResult{nil, nil, nil}
+
+// void expression result is used when expressions don't need to return anything
 var VoidExpressionResult = ExpressionResult{&NullVariableContainer, nil, nil}

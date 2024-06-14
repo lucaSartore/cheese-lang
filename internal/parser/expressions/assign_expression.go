@@ -30,7 +30,7 @@ func (a AssignExpression) Evaluate(globalContext *parser.Context, localContext *
 	}
 
 	if (*result.Value).GetVariableType() == parser.Ricotta {
-		return parser.NullExpressionResult, errors.New(fmt.Sprintf("Trying to assign a value Ricotta (Void) value"))
+		return parser.NullExpressionResult, fmt.Errorf("trying to assign a value Ricotta (Void) value")
 	}
 
 	counterLeft := len(a.variablesToAssign)
@@ -43,7 +43,7 @@ func (a AssignExpression) Evaluate(globalContext *parser.Context, localContext *
 	}
 
 	if counterLeft != counterRight {
-		return parser.NullExpressionResult, errors.New(fmt.Sprintf("Impossible to unpack %v values into %v variables", counterRight, counterLeft))
+		return parser.NullExpressionResult, fmt.Errorf("impossible to unpack %v values into %v variables", counterRight, counterLeft)
 	}
 
 	for i, variableName := range a.variablesToAssign {
@@ -70,7 +70,7 @@ func assignSingeVariable(variableName string, valueToAssign parser.VariableConta
 	}
 
 	if variable.Value.GetVariableType() != valueToAssign.GetVariableType() {
-		return errors.New(fmt.Sprintf("Unsupported assignment between values with type: %v and %v", variable.Value.GetVariableType(), valueToAssign.GetVariableType()))
+		return fmt.Errorf("unsupported assignment between values with type: %v and %v", variable.Value.GetVariableType(), valueToAssign.GetVariableType())
 	}
 
 	variable.Value = valueToAssign

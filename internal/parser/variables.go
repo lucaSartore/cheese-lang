@@ -72,6 +72,7 @@ func (*RicottaVariable) GetVariableType() VariableType {
 	return Ricotta
 }
 
+// used only when returning from a function
 type TupleVariableType struct {
 	Variables []VariableContainer
 }
@@ -83,6 +84,13 @@ func (*TupleVariableType) GetVariableType() VariableType {
 type Variable struct {
 	Name  string
 	Value VariableContainer
+}
+
+func MakeVariable(name string, value VariableContainer) Variable {
+	return Variable{
+		Name:  name,
+		Value: value,
+	}
 }
 
 var NullVariableContainer VariableContainer = &RicottaVariable{}

@@ -5,10 +5,10 @@ import (
 	"errors"
 )
 
-func NotOperator(v parser.Variable) (parser.Variable, error) {
-	value, ok := v.Value.(*parser.MilkVariable)
+func NotOperator(v parser.VariableContainer) (parser.VariableContainer, error) {
+	value, ok := v.(*parser.MilkVariable)
 	if !ok {
-		return parser.NullVariable, errors.New("Not operator unsupported for type: " + v.Value.GetVariableType().String())
+		return nil, errors.New("Not operator unsupported for type: " + v.GetVariableType().String())
 	}
-	return parser.Variable{Value: &parser.MilkVariable{Value: !value.Value}}, nil
+	return &parser.MilkVariable{Value: !value.Value}, nil
 }

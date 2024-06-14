@@ -2,29 +2,24 @@ package expressions
 
 import (
 	"cheese-lang/internal/parser"
-	"fmt"
 )
 
 type TwoToOneOperatorExpression struct {
-	LeftVariable  string
-	RightVariable string
-	Operator      func(parser.VariableContainer, parser.VariableContainer) (parser.VariableContainer, error)
+	leftValue  parser.Expression
+	rightValue parser.Expression
+	Operator   func(parser.VariableContainer, parser.VariableContainer) (parser.VariableContainer, error)
 }
 
 func (exp *TwoToOneOperatorExpression) Evaluate(globalContext *parser.Context, localContext *parser.Context) (parser.ExpressionResult, error) {
-	rightVariable, ok := parser.GetVariable(localContext, globalContext, exp.RightVariable)
-	if !ok {
-		return parser.NullExpressionResult, fmt.Errorf(
-			"unable to find a variable named %v",
-			exp.RightVariable)
+	leftValue, err := exp.leftValue.Evaluate(globalContext, localContext)
+	if err != nil {
+		return parser.NullExpressionResult, err
 	}
-	leftVariable, ok := parser.GetVariable(localContext, globalContext, exp.LeftVariable)
-	if !ok {
-		return parser.NullExpressionResult, fmt.Errorf(
-			"unable to find a variable named %v",
-			exp.LeftVariable)
+	rightValue, err := exp.rightValue.Evaluate(globalContext, localContext)
+	if err != nil {
+		return parser.NullExpressionResult, err
 	}
-	result, err := exp.Operator(rightVariable.Value, leftVariable.Value)
+	result, err := exp.Operator(rightValue.Value, leftValue.Value)
 	if err != nil {
 		return parser.NullExpressionResult, err
 	}

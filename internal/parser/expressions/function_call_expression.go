@@ -9,7 +9,7 @@ import (
 
 type FunctionCallExpression struct {
 	functionToCall string
-	args           []string
+	args           []parser.Expression
 }
 
 func (fc *FunctionCallExpression) Evaluate(globalContext *parser.Context, localContext *parser.Context) (parser.ExpressionResult, error) {
@@ -32,26 +32,25 @@ func (fc *FunctionCallExpression) Evaluate(globalContext *parser.Context, localC
 	}
 
 	for i := range len(fc.args) {
-		local_variable_name := fc.args[i]
-		local_variable, ok := parser.GetVariable(localContext, globalContext, local_variable_name)
-		if !ok {
-			return parser.NullExpressionResult, fmt.Errorf("unable to find the variable: %s", local_variable_name)
+		value, err := fc.args[i].Evaluate(globalContext, localContext)
+		if err != nil {
+			return parser.NullExpressionResult, err
 		}
 
-		local_variable_type := local_variable.Value.GetVariableType()
-		expected_variable_type := function.ArgumentsType[i]
+		value_type := value.Value.GetVariableType()
+		expected_type := function.ArgumentsType[i]
 
 		arg_name := function.ArgumentsNames[i]
 
-		if local_variable_type != expected_variable_type {
+		if value_type != expected_type {
 			return parser.NullExpressionResult, fmt.Errorf(
-				"expected type %s for argument %s got type %s instead",
-				expected_variable_type.String(),
-				local_variable_type.String(),
-				arg_name)
+				"expected type %s for argument %d got type %s instead",
+				expected_type.String(),
+				value_type.String(),
+				i)
 		}
 
-		newLocalContext.Variables[arg_name] = parser.MakeVariable(local_variable_name, local_variable.Value)
+		newLocalContext.Variables[arg_name] = parser.MakeVariable(arg_name, value.Value)
 	}
 
 	returnValue, error := function.Code.Evaluate(&newLocalContext, globalContext)

@@ -9,5 +9,5 @@ type LiteralExpression struct {
 }
 
 func (exp *LiteralExpression) Evaluate(globalContext *parser.Context, localContext *parser.Context) (parser.ExpressionResult, error) {
-	return parser.ExpressionResult{Value: &exp.Literal, Return: nil, Brake: nil}, nil
+	return parser.ExpressionResult{Value: exp.Literal, Return: false, Brake: false}, nil
 }

@@ -59,10 +59,10 @@ func (fc *FunctionCallExpression) Evaluate(globalContext *parser.Context, localC
 		return parser.NullExpressionResult, error
 	}
 	// the function failed to return a value, therefore there was an error in the code parsing phase
-	if returnValue.Brake != nil {
+	if returnValue.Brake {
 		panic("parser error 1 in function call expression")
 	}
-	if returnValue.Return != nil {
+	if returnValue.Return {
 		panic("parser error 2 in function call expression")
 	}
 	if returnValue.Value == nil {

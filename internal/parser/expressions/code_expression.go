@@ -21,7 +21,7 @@ func (ce *CodeExpression) Evaluate(globalContext *parser.Context, localContext *
 			return parser.NullExpressionResult, nil
 		}
 
-		if lastResult.Return != nil || lastResult.Brake != nil {
+		if lastResult.Return || lastResult.Brake {
 			return lastResult, nil
 		}
 	}

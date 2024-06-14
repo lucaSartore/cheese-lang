@@ -29,14 +29,14 @@ func (a AssignExpression) Evaluate(globalContext *parser.Context, localContext *
 		return parser.NullExpressionResult, errors.New("no valid assignment value at the right side of the assignment")
 	}
 
-	if (*result.Value).GetVariableType() == parser.Ricotta {
+	if result.Value.GetVariableType() == parser.Ricotta {
 		return parser.NullExpressionResult, fmt.Errorf("trying to assign a value Ricotta (Void) value")
 	}
 
 	counterLeft := len(a.variablesToAssign)
 	counterRight := 1
 
-	tupleValue, isTuple := (*result.Value).(*parser.TupleVariableType)
+	tupleValue, isTuple := result.Value.(*parser.TupleVariableType)
 
 	if isTuple {
 		counterRight = len((*tupleValue).Variables)

@@ -10,13 +10,13 @@ type Expression interface {
 // - be a return statement from a function
 // - be a brake statement
 type ExpressionResult struct {
-	Value  *VariableContainer
-	Return *FunctionReturns
-	Brake  *bool
+	Value  VariableContainer
+	Return bool
+	Brake  bool
 }
 
 // null expression result is used as a null value when you need to return an error
-var NullExpressionResult = ExpressionResult{nil, nil, nil}
+var NullExpressionResult = ExpressionResult{nil, false, false}
 
 // void expression result is used when expressions don't need to return anything
-var VoidExpressionResult = ExpressionResult{&NullVariableContainer, nil, nil}
+var VoidExpressionResult = ExpressionResult{NullVariableContainer, false, false}

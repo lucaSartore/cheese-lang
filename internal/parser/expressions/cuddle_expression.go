@@ -19,11 +19,13 @@ func (ce *CuddleExpression) Evaluate(globalContext *parser.Context, localContext
 			return parser.NullExpressionResult, err
 		}
 
-		if result.Return != nil {
+		if result.Return {
 			return result, nil
 		}
 
-		if result.Brake != nil {
+		if result.Brake {
+			// to avoid thai i endlessly brake around loops
+			result.Brake = false
 			return result, nil
 		}
 	}

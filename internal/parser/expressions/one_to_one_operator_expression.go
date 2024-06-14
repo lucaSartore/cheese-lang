@@ -19,5 +19,5 @@ func (exp *OneToOneOperator) Evaluate(globalContext *parser.Context, localContex
 	if err != nil {
 		return parser.NullExpressionResult, err
 	}
-	return parser.ExpressionResult{Value: &result, Return: nil, Brake: nil}, nil
+	return parser.ExpressionResult{Value: result, Return: false, Brake: false}, nil
 }

@@ -9,17 +9,17 @@ import (
 // AssignExpression is used every time a variable is assigned a value
 
 type AssignExpression struct {
-	variablesToAssign []string
-	valueToAssign     parser.Expression
+	VariablesToAssign []string
+	ValueToAssign     parser.Expression
 }
 
 func (a AssignExpression) Evaluate(globalContext *parser.Context, localContext *parser.Context) (parser.ExpressionResult, error) {
 
-	if len(a.variablesToAssign) == 0 {
+	if len(a.VariablesToAssign) == 0 {
 		panic("Error in AssignExpression construction, the parser did not enforce the presence of at least one variable at the right of the assign operation")
 	}
 
-	result, err := a.valueToAssign.Evaluate(globalContext, localContext)
+	result, err := a.ValueToAssign.Evaluate(globalContext, localContext)
 
 	if err != nil {
 		return parser.NullExpressionResult, err
@@ -33,7 +33,7 @@ func (a AssignExpression) Evaluate(globalContext *parser.Context, localContext *
 		return parser.NullExpressionResult, fmt.Errorf("trying to assign a value Ricotta (Void) value")
 	}
 
-	counterLeft := len(a.variablesToAssign)
+	counterLeft := len(a.VariablesToAssign)
 	counterRight := 1
 
 	tupleValue, isTuple := result.Value.(*parser.TupleVariableType)
@@ -47,11 +47,11 @@ func (a AssignExpression) Evaluate(globalContext *parser.Context, localContext *
 	}
 
 	if !isTuple {
-		assignSingeVariable(a.variablesToAssign[0], result.Value, globalContext, localContext)
+		assignSingeVariable(a.VariablesToAssign[0], result.Value, globalContext, localContext)
 		return parser.VoidExpressionResult, nil
 	}
 
-	for i, variableName := range a.variablesToAssign {
+	for i, variableName := range a.VariablesToAssign {
 		err := assignSingeVariable(variableName, tupleValue.Variables[i], globalContext, localContext)
 
 		if err != nil {
@@ -78,7 +78,6 @@ func assignSingeVariable(variableName string, valueToAssign parser.VariableConta
 		return fmt.Errorf("unsupported assignment between values with type: %v and %v", variable.Value.GetVariableType(), valueToAssign.GetVariableType())
 	}
 
-	variable.Value = valueToAssign
-
+	parser.SetVariable(localContext, globalContext, variableName, valueToAssign)
 	return nil
 }

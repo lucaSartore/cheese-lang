@@ -5,17 +5,17 @@ import (
 )
 
 type TwoToOneOperatorExpression struct {
-	leftValue  parser.Expression
-	rightValue parser.Expression
+	LeftValue  parser.Expression
+	RightValue parser.Expression
 	Operator   func(parser.VariableContainer, parser.VariableContainer) (parser.VariableContainer, error)
 }
 
 func (exp *TwoToOneOperatorExpression) Evaluate(globalContext *parser.Context, localContext *parser.Context) (parser.ExpressionResult, error) {
-	leftValue, err := exp.leftValue.Evaluate(globalContext, localContext)
+	leftValue, err := exp.LeftValue.Evaluate(globalContext, localContext)
 	if err != nil {
 		return parser.NullExpressionResult, err
 	}
-	rightValue, err := exp.rightValue.Evaluate(globalContext, localContext)
+	rightValue, err := exp.RightValue.Evaluate(globalContext, localContext)
 	if err != nil {
 		return parser.NullExpressionResult, err
 	}

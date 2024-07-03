@@ -21,6 +21,16 @@ func (c *Context) GetFunction(name string) (*Function, bool) {
 	return &f, ok
 }
 
+func (c *Context) SetVariable(name string, value VariableContainer) bool {
+	v, ok := c.Variables[name]
+	if !ok {
+		return false
+	}
+	v.Value = value
+	c.Variables[name] = v
+	return true
+}
+
 func (c *Context) AddVariable(t Variable) {
 	c.Variables[t.Name] = t
 }
@@ -44,4 +54,12 @@ func GetFunction(localContext *Context, globalContext *Context, name string) (*F
 		f, ok = globalContext.GetFunction(name)
 	}
 	return f, ok
+}
+
+func SetVariable(localContext *Context, globalContext *Context, name string, newValue VariableContainer) bool {
+	ok := localContext.SetVariable(name, newValue)
+	if !ok {
+		ok = globalContext.SetVariable(name, newValue)
+	}
+	return ok
 }

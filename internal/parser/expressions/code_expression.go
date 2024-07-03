@@ -18,7 +18,7 @@ func (ce *CodeExpression) Evaluate(globalContext *parser.Context, localContext *
 		lastResult, err := exp.Evaluate(globalContext, localContext)
 
 		if err != nil {
-			return parser.NullExpressionResult, nil
+			return parser.NullExpressionResult, err
 		}
 
 		if lastResult.Return || lastResult.Brake {

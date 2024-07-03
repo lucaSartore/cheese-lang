@@ -7,13 +7,13 @@ import (
 // CuddleExpression is the basic loop control flow of the language
 
 type CuddleExpression struct {
-	codeInside parser.Expression
+	CodeInside parser.Expression
 }
 
 func (ce *CuddleExpression) Evaluate(globalContext *parser.Context, localContext *parser.Context) (parser.ExpressionResult, error) {
 
 	for {
-		result, err := ce.codeInside.Evaluate(globalContext, localContext)
+		result, err := ce.CodeInside.Evaluate(globalContext, localContext)
 
 		if err != nil {
 			return parser.NullExpressionResult, err

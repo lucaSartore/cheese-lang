@@ -152,3 +152,41 @@ func TestAssignment(t *testing.T) {
 		t.Errorf("testAssignment: Expected m2 to be GHI, but got: %v", newM2.Value.(*parser.MozzarellaVariable).Value)
 	}
 }
+
+func TestCuddle(t *testing.T) {
+
+	context := parser.MakeContext()
+
+	context.AddVariable(parser.MakeVariable("i", &parser.ParmesanVariable{Value: 0}))
+
+	cuddle := expressions.CuddleExpression{
+		CodeInside: &expressions.CodeExpression{
+			Expressions: []parser.Expression{
+				&expressions.AssignExpression{
+					VariablesToAssign: []string{"i"},
+					ValueToAssign: &expressions.TwoToOneOperatorExpression{
+						Operator:   operators.AddOperator,
+						LeftValue:  &expressions.VariableExpression{Name: "i"},
+						RightValue: &expressions.LiteralExpression{Literal: &parser.ParmesanVariable{Value: 1}},
+					},
+				},
+				&expressions.TasteExpression{
+					Condition: &expressions.TwoToOneOperatorExpression{
+						Operator:   operators.EqualOperator,
+						LeftValue:  &expressions.VariableExpression{Name: "i"},
+						RightValue: &expressions.LiteralExpression{Literal: &parser.ParmesanVariable{Value: 10}},
+					},
+					Code: &expressions.BrakeExpression{},
+				},
+			},
+		},
+	}
+
+	VerifySingleExpression(&cuddle, t, "TestCuddle", &context, &parser.RicottaVariable{}, false, false, false, nil)
+
+	i, _ := context.GetVariable("i")
+	if i.Value.(*parser.ParmesanVariable).Value != 10 {
+		t.Errorf("TestCuddle: Expected i to be 10, but got: %v", i.Value.(*parser.ParmesanVariable).Value)
+	}
+
+}

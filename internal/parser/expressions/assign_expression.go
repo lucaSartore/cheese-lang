@@ -46,6 +46,11 @@ func (a AssignExpression) Evaluate(globalContext *parser.Context, localContext *
 		return parser.NullExpressionResult, fmt.Errorf("impossible to unpack %v values into %v variables", counterRight, counterLeft)
 	}
 
+	if !isTuple {
+		assignSingeVariable(a.variablesToAssign[0], result.Value, globalContext, localContext)
+		return parser.VoidExpressionResult, nil
+	}
+
 	for i, variableName := range a.variablesToAssign {
 		err := assignSingeVariable(variableName, tupleValue.Variables[i], globalContext, localContext)
 

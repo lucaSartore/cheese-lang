@@ -33,6 +33,8 @@ Mozzarella c = "hello";
 Milk d = fresh;
 ```
 
+note that is not possible to declare a variable and leave it uninitialized
+
 ### Comments
  - `//` (single line comment)
 

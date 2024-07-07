@@ -8,31 +8,31 @@ import (
 // FunctionCallExpression is used every time a function is called
 
 type FunctionCallExpression struct {
-	functionToCall string
-	args           []parser.Expression
+	FunctionToCall string
+	Args           []parser.Expression
 }
 
 func (fc *FunctionCallExpression) Evaluate(globalContext *parser.Context, localContext *parser.Context) (parser.ExpressionResult, error) {
 
-	function, ok := parser.GetFunction(localContext, globalContext, fc.functionToCall)
+	function, ok := parser.GetFunction(localContext, globalContext, fc.FunctionToCall)
 
 	if !ok {
-		return parser.NullExpressionResult, fmt.Errorf("unable to find the function: %s", fc.functionToCall)
+		return parser.NullExpressionResult, fmt.Errorf("unable to find the function: %s", fc.FunctionToCall)
 	}
 
 	// create the new context for the function call
 	var newLocalContext = parser.MakeContext()
 
-	if len(fc.args) != int(len(function.ArgumentsType)) {
+	if len(fc.Args) != int(len(function.ArgumentsType)) {
 		return parser.NullExpressionResult, fmt.Errorf(
 			"the function %s take in input %d parameters, but %d were given instead",
-			fc.functionToCall,
+			fc.FunctionToCall,
 			len(function.ArgumentsType),
-			len(fc.args))
+			len(fc.Args))
 	}
 
-	for i := range len(fc.args) {
-		value, err := fc.args[i].Evaluate(globalContext, localContext)
+	for i := range len(fc.Args) {
+		value, err := fc.Args[i].Evaluate(globalContext, localContext)
 		if err != nil {
 			return parser.NullExpressionResult, err
 		}
@@ -54,7 +54,7 @@ func (fc *FunctionCallExpression) Evaluate(globalContext *parser.Context, localC
 		newLocalContext.Variables[arg_name] = parser.MakeVariable(arg_name, value.Value)
 	}
 
-	returnValue, error := function.Code.Evaluate(&newLocalContext, globalContext)
+	returnValue, error := function.Code.Evaluate(globalContext, &newLocalContext)
 	if error != nil {
 		return parser.NullExpressionResult, error
 	}

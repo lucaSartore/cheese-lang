@@ -188,5 +188,61 @@ func TestCuddle(t *testing.T) {
 	if i.Value.(*parser.ParmesanVariable).Value != 10 {
 		t.Errorf("TestCuddle: Expected i to be 10, but got: %v", i.Value.(*parser.ParmesanVariable).Value)
 	}
+}
 
+func TestFunction(t *testing.T) {
+	globalContext := parser.MakeContext()
+	localContext := parser.MakeContext()
+	globalContext.AddFunction(parser.MakeFunction(
+		"pow",
+		&expressions.CodeExpression{
+			Expressions: []parser.Expression{
+				&expressions.TasteExpression{
+					Condition: &expressions.TwoToOneOperatorExpression{
+						Operator:   operators.EqualOperator,
+						LeftValue:  &expressions.VariableExpression{Name: "exponent"},
+						RightValue: &expressions.LiteralExpression{Literal: &parser.ParmesanVariable{Value: 0}},
+					},
+					Code: &expressions.ReturnExpression{
+						Expression: &expressions.LiteralExpression{Literal: &parser.ParmesanVariable{Value: 1}},
+					},
+				},
+				&expressions.ReturnExpression{
+					Expression: &expressions.FunctionCallExpression{
+						FunctionToCall: "pow",
+						Args: []parser.Expression{
+							&expressions.VariableExpression{Name: "base"},
+							&expressions.TwoToOneOperatorExpression{
+								Operator:   operators.SubOperator,
+								LeftValue:  &expressions.VariableExpression{Name: "exponent"},
+								RightValue: &expressions.LiteralExpression{Literal: &parser.ParmesanVariable{Value: 1}},
+							},
+						},
+					},
+				},
+			},
+		},
+		[]parser.VariableType{parser.Parmesan, parser.Parmesan},
+		[]string{"base", "exponent"},
+	))
+
+	code := expressions.FunctionCallExpression{
+		FunctionToCall: "pow",
+		Args: []parser.Expression{
+			&expressions.LiteralExpression{Literal: &parser.ParmesanVariable{Value: 5}},
+			&expressions.LiteralExpression{Literal: &parser.ParmesanVariable{Value: 3}},
+		},
+	}
+
+	result, err := code.Evaluate(&globalContext, &localContext)
+	if err != nil {
+		t.Errorf("unexpected error in function evaluation: %v", err)
+	}
+	if result.Return == true {
+		t.Errorf("unexpected return in function evaluation")
+	}
+	if result.Brake == true {
+		t.Errorf("unexpected brake in function evaluation")
+	}
+	VerifyValueEquivalence(result.Value, &parser.ParmesanVariable{Value: 5 * 5 * 5})
 }

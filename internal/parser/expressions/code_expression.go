@@ -21,7 +21,12 @@ func (ce *CodeExpression) Evaluate(globalContext *parser.Context, localContext *
 			return parser.NullExpressionResult, err
 		}
 
-		if lastResult.Return || lastResult.Brake {
+		if lastResult.Return {
+			lastResult.Return = false
+			return lastResult, nil
+		}
+
+		if lastResult.Brake {
 			return lastResult, nil
 		}
 	}

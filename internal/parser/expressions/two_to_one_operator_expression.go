@@ -19,7 +19,7 @@ func (exp *TwoToOneOperatorExpression) Evaluate(globalContext *parser.Context, l
 	if err != nil {
 		return parser.NullExpressionResult, err
 	}
-	result, err := exp.Operator(rightValue.Value, leftValue.Value)
+	result, err := exp.Operator(leftValue.Value, rightValue.Value)
 	if err != nil {
 		return parser.NullExpressionResult, err
 	}

@@ -108,7 +108,7 @@ Milk d = fresh;
 
 There is no operator priority in cheese lang, but you could use parenthesis to achieve the desired order
 
-If no parenthesis are used the language will evaluate expressions from left to right
+If no parenthesis are used the language will evaluate expressions from left to right. For example:
 ```
 a+b*c-d/e
 ```

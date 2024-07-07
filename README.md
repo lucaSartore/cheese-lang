@@ -103,6 +103,19 @@ Milk d = fresh;
     - `&&` (and)
     - `||` (or)
     - `^` (exor)
+
+### Operator priority
+
+There is no operator priority in cheese lang, but you could use parenthesis to achieve the desired order
+
+If no parenthesis are used the language will evaluate expressions from left to right
+```
+a+b*c-d/e
+```
+will become
+```
+((((a+b)*c)-d)/e)
+```
 ### standard library
 
 #### type conversion

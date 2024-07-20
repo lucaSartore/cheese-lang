@@ -64,6 +64,37 @@ Milk d = fresh;
         }
     }
     ```
+### Structure
+
+In a cheese lang program there are 2 different contexts: `Global` and `Local` contexts.
+In a `Global` context you will only be able to declare variables and functions, but you won't be able
+to perform operations on variables.
+On a `Local` context you are able to do everything except declaring function.
+
+In cheese lang there is one important function named `Fondue` that will be called as entry of your program (equivalent of the main function)
+
+
+```
+
+Parmesan SUM_COUNTER = 0;
+
+// Not allowed since we are in global context
+// SUM_COUNTER = SUM_COUNTER + 1 
+
+recipe Sum(Parmesan a, Parmesan b) -> Parmesan{
+    SUM_COUNTER = SUM_COUNTER + 1;
+    prepare a + b;
+}
+
+// main function
+recipe Fondue(){
+    Parmesan x = Sum(43,26);
+
+    // Not allowed since we are in local context
+    // recipe MySum(Parmesan a, Parmesan b) -> Parmesan {...}
+    prepare;
+}
+
 ### Type operations
 
 - `Parmesan`:

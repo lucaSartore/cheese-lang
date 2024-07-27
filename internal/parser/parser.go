@@ -13,6 +13,16 @@ type Parser struct {
 	GlobalContext *Context
 }
 
+type ParserResult struct {
+	progressed bool
+	Expression Expression
+	Error      error
+}
+
+func MakeParserResult(progressed bool, expression Expression, error error) ParserResult {
+	return ParserResult{progressed: progressed, Expression: expression, Error: error}
+}
+
 func MakeParser(tokens []tokenizer.Token, globalContext *Context) Parser {
 	return Parser{Tokens: tokens, Index: 0, GlobalContext: globalContext}
 }
@@ -99,6 +109,6 @@ func (p *Parser) GetNextParserRegion() (Parser, bool) {
 	return to_return, true
 }
 
-// func ParseAnything(tokens []tokenizer.Token, index int, isLocalContext bool, globalContext *Context) ParserResult {
-// 	return UnsuccessfulParserResult
-// }
+func (p *Parser) ParseAnything(global bool) ParserResult {
+	return MakeParserResult(false, nil, nil)
+}

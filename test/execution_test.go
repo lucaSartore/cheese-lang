@@ -1,16 +1,15 @@
 package test
 
 import (
-	"cheese-lang/internal/parser"
-	"cheese-lang/internal/parser/expressions"
-	"cheese-lang/internal/parser/operators"
+	"cheese-lang/internal/expressions"
+	"cheese-lang/internal/expressions/operators"
 
 	// "fmt"
 	"testing"
 )
 
-func VerifySingleExpression(expressionToTest parser.Expression, t *testing.T, callerName string, context *parser.Context,
-	expectedValue parser.VariableContainer, expectReturn bool, expectBrake bool, expectError bool, expectedError error) {
+func VerifySingleExpression(expressionToTest expressions.Expression, t *testing.T, callerName string, context *expressions.Context,
+	expectedValue expressions.VariableContainer, expectReturn bool, expectBrake bool, expectError bool, expectedError error) {
 
 	result, err := expressionToTest.Evaluate(context, context)
 
@@ -47,24 +46,24 @@ func VerifySingleExpression(expressionToTest parser.Expression, t *testing.T, ca
 
 }
 
-func VerifyValueEquivalence(v1 parser.VariableContainer, v2 parser.VariableContainer) bool {
+func VerifyValueEquivalence(v1 expressions.VariableContainer, v2 expressions.VariableContainer) bool {
 	if v1.GetVariableType() != v2.GetVariableType() {
 		return false
 	}
 	switch v1.GetVariableType() {
-	case parser.Mozzarella:
-		return v1.(*parser.MozzarellaVariable).Value == v2.(*parser.MozzarellaVariable).Value
-	case parser.Parmesan:
-		return v1.(*parser.ParmesanVariable).Value == v2.(*parser.ParmesanVariable).Value
-	case parser.Gorgonzola:
-		return v1.(*parser.GorgonzolaVariable).Value == v2.(*parser.GorgonzolaVariable).Value
-	case parser.Milk:
-		return v1.(*parser.MilkVariable).Value == v2.(*parser.MilkVariable).Value
-	case parser.Ricotta:
+	case expressions.Mozzarella:
+		return v1.(*expressions.MozzarellaVariable).Value == v2.(*expressions.MozzarellaVariable).Value
+	case expressions.Parmesan:
+		return v1.(*expressions.ParmesanVariable).Value == v2.(*expressions.ParmesanVariable).Value
+	case expressions.Gorgonzola:
+		return v1.(*expressions.GorgonzolaVariable).Value == v2.(*expressions.GorgonzolaVariable).Value
+	case expressions.Milk:
+		return v1.(*expressions.MilkVariable).Value == v2.(*expressions.MilkVariable).Value
+	case expressions.Ricotta:
 		return true
-	case parser.Tuple:
-		t1 := v1.(*parser.TupleVariableType)
-		t2 := v2.(*parser.TupleVariableType)
+	case expressions.Tuple:
+		t1 := v1.(*expressions.TupleVariableType)
+		t2 := v2.(*expressions.TupleVariableType)
 		if len(t1.Variables) != len(t2.Variables) {
 			return false
 		}
@@ -81,10 +80,10 @@ func VerifyValueEquivalence(v1 parser.VariableContainer, v2 parser.VariableConta
 
 func TestEqualOperator(t *testing.T) {
 
-	context := parser.MakeContext()
-	context.AddVariable(parser.MakeVariable("m1", &parser.MozzarellaVariable{Value: "ABC"}))
-	context.AddVariable(parser.MakeVariable("m2", &parser.MozzarellaVariable{Value: "ABC"}))
-	context.AddVariable(parser.MakeVariable("m3", &parser.MozzarellaVariable{Value: "123"}))
+	context := expressions.MakeContext()
+	context.AddVariable(expressions.MakeVariable("m1", &expressions.MozzarellaVariable{Value: "ABC"}))
+	context.AddVariable(expressions.MakeVariable("m2", &expressions.MozzarellaVariable{Value: "ABC"}))
+	context.AddVariable(expressions.MakeVariable("m3", &expressions.MozzarellaVariable{Value: "123"}))
 
 	m1 := expressions.VariableExpression{Name: "m1"}
 	m2 := expressions.VariableExpression{Name: "m2"}
@@ -96,7 +95,7 @@ func TestEqualOperator(t *testing.T) {
 		LeftValue:  &m2,
 	}
 
-	VerifySingleExpression(&exp, t, "TestEqualOperator", &context, &parser.MilkVariable{Value: true}, false, false, false, nil)
+	VerifySingleExpression(&exp, t, "TestEqualOperator", &context, &expressions.MilkVariable{Value: true}, false, false, false, nil)
 
 	exp = expressions.TwoToOneOperatorExpression{
 		Operator:   operators.EqualOperator,
@@ -104,77 +103,77 @@ func TestEqualOperator(t *testing.T) {
 		LeftValue:  &m3,
 	}
 
-	VerifySingleExpression(&exp, t, "TestEqualOperator", &context, &parser.MilkVariable{Value: false}, false, false, false, nil)
+	VerifySingleExpression(&exp, t, "TestEqualOperator", &context, &expressions.MilkVariable{Value: false}, false, false, false, nil)
 }
 
 func TestAssignment(t *testing.T) {
 
-	context := parser.MakeContext()
+	context := expressions.MakeContext()
 
-	context.AddVariable(parser.MakeVariable("m1", &parser.MozzarellaVariable{Value: ""}))
-	context.AddVariable(parser.MakeVariable("m2", &parser.MozzarellaVariable{Value: ""}))
+	context.AddVariable(expressions.MakeVariable("m1", &expressions.MozzarellaVariable{Value: ""}))
+	context.AddVariable(expressions.MakeVariable("m2", &expressions.MozzarellaVariable{Value: ""}))
 
 	value := expressions.AssignExpression{
 		VariablesToAssign: []string{"m1"},
 		ValueToAssign: &expressions.LiteralExpression{
-			Literal: &parser.MozzarellaVariable{Value: "ABC"},
+			Literal: &expressions.MozzarellaVariable{Value: "ABC"},
 		},
 	}
 
-	VerifySingleExpression(&value, t, "testAssignment", &context, &parser.RicottaVariable{}, false, false, false, nil)
+	VerifySingleExpression(&value, t, "testAssignment", &context, &expressions.RicottaVariable{}, false, false, false, nil)
 
 	newM1, _ := context.GetVariable("m1")
-	if newM1.Value.(*parser.MozzarellaVariable).Value != "ABC" {
-		t.Errorf("testAssignment: Expected m1 to be ABC, but got: %v", newM1.Value.(*parser.MozzarellaVariable).Value)
+	if newM1.Value.(*expressions.MozzarellaVariable).Value != "ABC" {
+		t.Errorf("testAssignment: Expected m1 to be ABC, but got: %v", newM1.Value.(*expressions.MozzarellaVariable).Value)
 	}
 
 	value2 := expressions.AssignExpression{
 		VariablesToAssign: []string{"m1", "m2"},
 		ValueToAssign: &expressions.LiteralExpression{
-			Literal: &parser.TupleVariableType{
-				Variables: []parser.VariableContainer{
-					&parser.MozzarellaVariable{Value: "DEF"},
-					&parser.MozzarellaVariable{Value: "GHI"},
+			Literal: &expressions.TupleVariableType{
+				Variables: []expressions.VariableContainer{
+					&expressions.MozzarellaVariable{Value: "DEF"},
+					&expressions.MozzarellaVariable{Value: "GHI"},
 				},
 			},
 		},
 	}
 
-	VerifySingleExpression(&value2, t, "testAssignment", &context, &parser.RicottaVariable{}, false, false, false, nil)
+	VerifySingleExpression(&value2, t, "testAssignment", &context, &expressions.RicottaVariable{}, false, false, false, nil)
 
 	newM1, _ = context.GetVariable("m1")
-	if newM1.Value.(*parser.MozzarellaVariable).Value != "DEF" {
-		t.Errorf("testAssignment: Expected m1 to be DEF, but got: %v", newM1.Value.(*parser.MozzarellaVariable).Value)
+	if newM1.Value.(*expressions.MozzarellaVariable).Value != "DEF" {
+		t.Errorf("testAssignment: Expected m1 to be DEF, but got: %v", newM1.Value.(*expressions.MozzarellaVariable).Value)
 	}
 
 	newM2, _ := context.GetVariable("m2")
-	if newM2.Value.(*parser.MozzarellaVariable).Value != "GHI" {
-		t.Errorf("testAssignment: Expected m2 to be GHI, but got: %v", newM2.Value.(*parser.MozzarellaVariable).Value)
+	if newM2.Value.(*expressions.MozzarellaVariable).Value != "GHI" {
+		t.Errorf("testAssignment: Expected m2 to be GHI, but got: %v", newM2.Value.(*expressions.MozzarellaVariable).Value)
 	}
 }
 
 func TestCuddle(t *testing.T) {
 
-	context := parser.MakeContext()
+	context := expressions.MakeContext()
 
-	context.AddVariable(parser.MakeVariable("i", &parser.ParmesanVariable{Value: 0}))
+	context.AddVariable(expressions.MakeVariable("i", &expressions.ParmesanVariable{Value: 0}))
 
 	cuddle := expressions.CuddleExpression{
 		CodeInside: &expressions.CodeExpression{
-			Expressions: []parser.Expression{
+			Expressions: []expressions.Expression{
 				&expressions.AssignExpression{
 					VariablesToAssign: []string{"i"},
 					ValueToAssign: &expressions.TwoToOneOperatorExpression{
 						Operator:   operators.AddOperator,
 						LeftValue:  &expressions.VariableExpression{Name: "i"},
-						RightValue: &expressions.LiteralExpression{Literal: &parser.ParmesanVariable{Value: 1}},
+						RightValue: &expressions.LiteralExpression{Literal: &expressions.ParmesanVariable{Value: 1}},
 					},
 				},
 				&expressions.TasteExpression{
 					Condition: &expressions.TwoToOneOperatorExpression{
 						Operator:   operators.EqualOperator,
 						LeftValue:  &expressions.VariableExpression{Name: "i"},
-						RightValue: &expressions.LiteralExpression{Literal: &parser.ParmesanVariable{Value: 10}},
+						RightValue: &expressions.LiteralExpression{Literal: &expressions.ParmesanVariable{Value: 10}},
 					},
 					Code: &expressions.BrakeExpression{},
 				},
@@ -182,55 +181,55 @@ func TestCuddle(t *testing.T) {
 		},
 	}
 
-	VerifySingleExpression(&cuddle, t, "TestCuddle", &context, &parser.RicottaVariable{}, false, false, false, nil)
+	VerifySingleExpression(&cuddle, t, "TestCuddle", &context, &expressions.RicottaVariable{}, false, false, false, nil)
 
 	i, _ := context.GetVariable("i")
-	if i.Value.(*parser.ParmesanVariable).Value != 10 {
-		t.Errorf("TestCuddle: Expected i to be 10, but got: %v", i.Value.(*parser.ParmesanVariable).Value)
+	if i.Value.(*expressions.ParmesanVariable).Value != 10 {
+		t.Errorf("TestCuddle: Expected i to be 10, but got: %v", i.Value.(*expressions.ParmesanVariable).Value)
 	}
 }
 
 func TestFunction(t *testing.T) {
-	globalContext := parser.MakeContext()
-	localContext := parser.MakeContext()
-	globalContext.AddFunction(parser.MakeFunction(
+	globalContext := expressions.MakeContext()
+	localContext := expressions.MakeContext()
+	globalContext.AddFunction(expressions.MakeFunction(
 		"pow",
 		&expressions.CodeExpression{
-			Expressions: []parser.Expression{
+			Expressions: []expressions.Expression{
 				&expressions.TasteExpression{
 					Condition: &expressions.TwoToOneOperatorExpression{
 						Operator:   operators.EqualOperator,
 						LeftValue:  &expressions.VariableExpression{Name: "exponent"},
-						RightValue: &expressions.LiteralExpression{Literal: &parser.ParmesanVariable{Value: 0}},
+						RightValue: &expressions.LiteralExpression{Literal: &expressions.ParmesanVariable{Value: 0}},
 					},
 					Code: &expressions.ReturnExpression{
-						Expression: &expressions.LiteralExpression{Literal: &parser.ParmesanVariable{Value: 1}},
+						Expression: &expressions.LiteralExpression{Literal: &expressions.ParmesanVariable{Value: 1}},
 					},
 				},
 				&expressions.ReturnExpression{
 					Expression: &expressions.FunctionCallExpression{
 						FunctionToCall: "pow",
-						Args: []parser.Expression{
+						Args: []expressions.Expression{
 							&expressions.VariableExpression{Name: "base"},
 							&expressions.TwoToOneOperatorExpression{
 								Operator:   operators.SubOperator,
 								LeftValue:  &expressions.VariableExpression{Name: "exponent"},
-								RightValue: &expressions.LiteralExpression{Literal: &parser.ParmesanVariable{Value: 1}},
+								RightValue: &expressions.LiteralExpression{Literal: &expressions.ParmesanVariable{Value: 1}},
 							},
 						},
 					},
 				},
 			},
 		},
-		[]parser.VariableType{parser.Parmesan, parser.Parmesan},
+		[]expressions.VariableType{expressions.Parmesan, expressions.Parmesan},
 		[]string{"base", "exponent"},
 	))
 
 	code := expressions.FunctionCallExpression{
 		FunctionToCall: "pow",
-		Args: []parser.Expression{
-			&expressions.LiteralExpression{Literal: &parser.ParmesanVariable{Value: 5}},
-			&expressions.LiteralExpression{Literal: &parser.ParmesanVariable{Value: 3}},
+		Args: []expressions.Expression{
+			&expressions.LiteralExpression{Literal: &expressions.ParmesanVariable{Value: 5}},
+			&expressions.LiteralExpression{Literal: &expressions.ParmesanVariable{Value: 3}},
 		},
 	}
 
@@ -244,5 +243,5 @@ func TestFunction(t *testing.T) {
 	if result.Brake == true {
 		t.Errorf("unexpected brake in function evaluation")
 	}
-	VerifyValueEquivalence(result.Value, &parser.ParmesanVariable{Value: 5 * 5 * 5})
+	VerifyValueEquivalence(result.Value, &expressions.ParmesanVariable{Value: 5 * 5 * 5})
 }

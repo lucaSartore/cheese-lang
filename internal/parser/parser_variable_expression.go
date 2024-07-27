@@ -1,21 +1,21 @@
 package parser
 
 import (
-	"cheese-lang/internal/parser/expressions"
+	"cheese-lang/internal/expressions"
 	"cheese-lang/internal/tokenizer"
 	"fmt"
 )
 
-func tokenToType(token tokenizer.TokenType) VariableType {
+func tokenToType(token tokenizer.TokenType) expressions.VariableType {
 	switch token {
 	case tokenizer.MozzarellaType:
-		return Mozzarella
+		return expressions.Mozzarella
 	case tokenizer.GorgonzolaType:
-		return Gorgonzola
+		return expressions.Gorgonzola
 	case tokenizer.MilkType:
-		return Milk
+		return expressions.Milk
 	case tokenizer.ParmesanType:
-		return Parmesan
+		return expressions.Parmesan
 	}
 	panic(fmt.Sprintf("Unknown token type %v", token))
 }
@@ -45,7 +45,7 @@ func (p *Parser) parseVariableDeclaration(global bool) ParserResult {
 				return MakeParserResult(false, nil, fmt.Errorf("expected expression after assignment operator"))
 			}
 
-			var expression Expression = &expressions.VariableDeclarationExpression{
+			var expression expressions.Expression = &expressions.VariableDeclarationExpression{
 				Type:     tokenToType(token),
 				Name:     identifier.TokenVal,
 				ToAssign: exprResult.Expression,

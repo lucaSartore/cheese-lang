@@ -1,6 +1,7 @@
 package parser
 
 import (
+	"cheese-lang/internal/expressions"
 	"cheese-lang/internal/tokenizer"
 	"errors"
 	"fmt"
@@ -10,20 +11,20 @@ type Parser struct {
 	Tokens        []tokenizer.Token
 	Index         int // point to the first token that has't been parsed yet
 	End           int // point to the first token that is not part of the expression that has been parsed
-	GlobalContext *Context
+	GlobalContext *expressions.Context
 }
 
 type ParserResult struct {
 	progressed bool
-	Expression Expression
+	Expression expressions.Expression
 	Error      error
 }
 
-func MakeParserResult(progressed bool, expression Expression, error error) ParserResult {
+func MakeParserResult(progressed bool, expression expressions.Expression, error error) ParserResult {
 	return ParserResult{progressed: progressed, Expression: expression, Error: error}
 }
 
-func MakeParser(tokens []tokenizer.Token, globalContext *Context) Parser {
+func MakeParser(tokens []tokenizer.Token, globalContext *expressions.Context) Parser {
 	return Parser{Tokens: tokens, Index: 0, GlobalContext: globalContext}
 }
 

@@ -3,8 +3,6 @@ package test
 import (
 	"cheese-lang/internal/expressions"
 	"cheese-lang/internal/expressions/operators"
-
-	// "fmt"
 	"testing"
 )
 

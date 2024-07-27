@@ -15,9 +15,9 @@ type Parser struct {
 }
 
 type ParserResult struct {
-	progressed bool
-	Expression expressions.Expression
-	Error      error
+	progressed bool                   // sai if the operation has progressed or not (note that an error still count as progress)
+	Expression expressions.Expression // return of the expression result
+	Error      error                  // error because of malformed input
 }
 
 func MakeParserResult(progressed bool, expression expressions.Expression, error error) ParserResult {
@@ -111,5 +111,17 @@ func (p *Parser) GetNextParserRegion() (Parser, bool) {
 }
 
 func (p *Parser) ParseAnything(global bool) ParserResult {
-	return MakeParserResult(false, nil, nil)
+
+	// remember to wrapper function to ensure that index stays constant
+	return p.ParseSomethingWithIndexCheck(global, p.parseVariableDeclaration)
+
+}
+
+func (p *Parser) ParseSomethingWithIndexCheck(global bool, function func(bool) ParserResult) ParserResult {
+	indexStart := p.Index
+	result := function(global)
+	if !result.progressed {
+		p.Index = indexStart
+	}
+	return result
 }

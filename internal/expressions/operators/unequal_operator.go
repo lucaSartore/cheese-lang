@@ -5,7 +5,7 @@ import (
 	"errors"
 )
 
-func UnequalOperator(v1 expressions.VariableContainer, v2 expressions.VariableContainer) (expressions.VariableContainer, error) {
+func UnEqualOperator(v1 expressions.VariableContainer, v2 expressions.VariableContainer) (expressions.VariableContainer, error) {
 	value1, ok1 := v1.(*expressions.ParmesanVariable)
 	value2, ok2 := v2.(*expressions.ParmesanVariable)
 	if ok1 && ok2 {

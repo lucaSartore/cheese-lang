@@ -1,24 +1,22 @@
 package parser
 
 import (
-	"cheese-lang/internal/expressions"
 	"cheese-lang/internal/tokenizer"
 )
 
 type Parser struct {
-	Tokens        []tokenizer.Token
-	Index         int // point to the first token that has't been parsed yet
-	IndexTmp      int // temporary index used to store where the parser is at, in the case the succuss of a parsing is not sure yet
-	End           int // point to the first token that is not part of the expression that has been parsed
-	GlobalContext *expressions.Context
+	Tokens   []tokenizer.Token
+	Index    int // point to the first token that has't been parsed yet
+	IndexTmp int // temporary index used to store where the parser is at, in the case the succuss of a parsing is not sure yet
+	End      int // point to the first token that is not part of the expression that has been parsed
 }
 
-func MakeParser(tokens []tokenizer.Token, globalContext *expressions.Context) Parser {
-	return Parser{Tokens: tokens, Index: 0, IndexTmp: 0, GlobalContext: globalContext}
+func MakeParser(tokens []tokenizer.Token) Parser {
+	return Parser{Tokens: tokens, Index: 0, IndexTmp: 0, End: len(tokens)}
 }
 
 func (p *Parser) NewSplicedParser(newIndex int, newEnd int) Parser {
-	newParser := MakeParser(p.Tokens, p.GlobalContext)
+	newParser := MakeParser(p.Tokens)
 	newParser.Index = newIndex
 	newParser.IndexTmp = newIndex
 	newParser.End = newEnd
@@ -78,7 +76,6 @@ func (p *Parser) ParseBySkippingStages(global bool, stagesToSkip []ParsingStageT
 			return result
 		}
 
-		// reset the index before trying the next stage
 		p.IndexTmp = indexTmpPre
 	}
 	return p.MakeUnsuccessfulResult()

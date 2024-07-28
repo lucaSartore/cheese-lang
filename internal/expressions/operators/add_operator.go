@@ -18,5 +18,11 @@ func AddOperator(v1 expressions.VariableContainer, v2 expressions.VariableContai
 		return &expressions.GorgonzolaVariable{Value: value3.Value + value4.Value}, nil
 	}
 
+	value5, ok1 := v1.(*expressions.MozzarellaVariable)
+	value6, ok2 := v2.(*expressions.MozzarellaVariable)
+	if ok1 && ok2 {
+		return &expressions.MozzarellaVariable{Value: value5.Value + value6.Value}, nil
+	}
+
 	return nil, errors.New("Add operator unsupported for types: " + v1.GetVariableType().String() + ", " + v2.GetVariableType().String())
 }

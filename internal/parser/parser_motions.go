@@ -33,9 +33,11 @@ func (p *Parser) ReadNextToken() (tokenizer.Token, error) {
 func (p *Parser) ExpectReedNextToken(token tokenizer.TokenType) (tokenizer.Token, error) {
 	t, e := p.ReadNextToken()
 	if e != nil {
+		p.IndexTmp--
 		return t, e
 	}
 	if t.TokenType != token {
+		p.IndexTmp--
 		return t, fmt.Errorf("expected token %s, got %s", token.String(), t.TokenType.String())
 	}
 	return t, nil

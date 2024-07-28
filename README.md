@@ -55,7 +55,7 @@ note that is not possible to declare a variable and leave it uninitialized
     };
     
     // call
-    <name>(<param 1>, <param 2>, ...);
+    <return 1> ,<return 2>, ... = <name>(<param 1>, <param 2>, ...);
     ``` 
  - `curdle` (loop)
     ```

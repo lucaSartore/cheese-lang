@@ -59,7 +59,7 @@ func TestMozzarellaVariableParser(t *testing.T) {
 }
 
 func TestParmesanVariableParser(t *testing.T) {
-	testStr := "Parmesan x = (5 + 3) * (11 - 1)"
+	testStr := "Parmesan x = (100-((5 + 3) * 2)) * (11 - 1)"
 	tokens, err := tokenizer.Tokenize(testStr)
 
 	if err != nil {
@@ -103,8 +103,8 @@ func TestParmesanVariableParser(t *testing.T) {
 
 	value := variable.Value.(*expressions.ParmesanVariable).Value
 
-	if value != 80 {
-		t.Errorf("Expected value: 80, got: %v", value)
+	if value != 840 {
+		t.Errorf("Expected value: 840, got: %v", value)
 		return
 	}
 }

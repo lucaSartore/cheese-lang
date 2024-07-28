@@ -41,9 +41,10 @@ const (
 	VariableDeclarationStage ParsingStageType = 1
 	LiteralExpressionStage   ParsingStageType = 2
 	BracketsParsingStage     ParsingStageType = 3
+	AssignExpressionStage    ParsingStageType = 4
 )
 
-var AllParsingStages = []ParsingStageType{TwoToOneOperatorStage, VariableDeclarationStage, LiteralExpressionStage, BracketsParsingStage}
+var AllParsingStages = []ParsingStageType{TwoToOneOperatorStage, VariableDeclarationStage, LiteralExpressionStage, BracketsParsingStage, AssignExpressionStage}
 
 func (p *Parser) ExecuteParsingStage(stage ParsingStageType, global bool) ParserResult {
 	switch stage {
@@ -55,6 +56,8 @@ func (p *Parser) ExecuteParsingStage(stage ParsingStageType, global bool) Parser
 		return p.ParseLiteralExpression(global)
 	case BracketsParsingStage:
 		return p.parseBracketExpression(global)
+	case AssignExpressionStage:
+		return p.parseAssignExpression(global)
 	default:
 		panic("Unknown parsing stage")
 	}

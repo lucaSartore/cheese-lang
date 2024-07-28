@@ -69,19 +69,31 @@ func (p *Parser) FindNextMatchMultiple(tokens []tokenizer.TokenType) int {
 }
 
 func (p *Parser) FindNextMatchingCupuleOfTokens(start int, open tokenizer.TokenType, close tokenizer.TokenType) int {
-	if start < p.IndexTmp || start >= p.End {
+	if start < p.Index || start >= p.End {
 		panic("start index out of range")
 	}
+	if p.Tokens[p.Index].TokenType != open {
+		panic("start index is not an open bracket")
+	}
 
-	index_open := p.findNextMatchStartingFrom(open, start)
+	toClose := 1
+	index := start + 1
 
-	if index_open == -1 {
+	for toClose != 0 && index < p.End {
+		if p.Tokens[index].TokenType == open {
+			toClose++
+		}
+		if p.Tokens[index].TokenType == close {
+			toClose--
+		}
+		index++
+	}
+
+	if toClose != 0 {
 		return -1
 	}
 
-	index_close := p.findNextMatchStartingFrom(close, index_open+1)
-
-	return index_close
+	return index - 1
 }
 
 func (p *Parser) FindMatchingBrackets(start int) int {

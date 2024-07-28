@@ -24,6 +24,8 @@ var Operators = []OperatorTuple{
 	{tokenizer.ExorOperator, operators.ExorOperator},
 }
 
+var operatorTokens []tokenizer.TokenType = Map(Operators, func(v OperatorTuple) tokenizer.TokenType { return v.OperatorToken })
+
 func (p *Parser) parseTwoToOneOperator(global bool) ParserResult {
 
 	leftValueResult := p.ParseAnything(global)
@@ -32,16 +34,21 @@ func (p *Parser) parseTwoToOneOperator(global bool) ParserResult {
 		return leftValueResult
 	}
 
-	if !leftValueResult.progressed {
-		return leftValueResult
+	if leftValueResult.Expression == nil {
+		return p.MakeUnsuccessfulResult()
 	}
 
 	leftValue := leftValueResult.Expression
 
+	// in this case this is not a two to one operator, however we can return the left value
+	if p.NextTokenMatchMultiple(operatorTokens) == false {
+		return leftValueResult
+	}
+
 	token, err := p.ReadNextToken()
 
 	if err != nil {
-		return MakeParserResult(true, nil, err)
+		panic("assertion 1 fail in parseTwoToOneOperator")
 	}
 
 	var operator *OperatorTuple = nil
@@ -54,7 +61,7 @@ func (p *Parser) parseTwoToOneOperator(global bool) ParserResult {
 	}
 
 	if operator == nil {
-		return MakeParserResult(false, nil, nil)
+		panic("assertion 2 fail in parseTwoToOneOperator")
 	}
 
 	rightValueResult := p.ParseAnything(global)
@@ -63,11 +70,11 @@ func (p *Parser) parseTwoToOneOperator(global bool) ParserResult {
 		return rightValueResult
 	}
 
-	if !rightValueResult.progressed {
-		return MakeParserResult(true, nil, fmt.Errorf("expected value after operator %s", token.TokenType.String()))
+	if rightValueResult.Expression == nil {
+		return p.MakeErrorResult(fmt.Errorf("expected value after operator %s", token.TokenType.String()))
 	}
 
 	rightValue := rightValueResult.Expression
 
-	return MakeParserResult(true, &expressions.TwoToOneOperatorExpression{LeftValue: leftValue, RightValue: rightValue, Operator: operator.OperatorFunc}, nil)
+	return p.MakeSuccessfulResult(&expressions.TwoToOneOperatorExpression{LeftValue: leftValue, RightValue: rightValue, Operator: operator.OperatorFunc})
 }

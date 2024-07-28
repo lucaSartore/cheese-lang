@@ -15,7 +15,7 @@ func (p *Parser) ParseLiteralExpression(global bool) ParserResult {
 		}
 		variable := expressions.GorgonzolaVariable{Value: floatLiteral}
 		expression := expressions.LiteralExpression{Literal: &variable}
-		return MakeParserResult(true, &expression, nil)
+		return p.MakeSuccessfulResult(&expression)
 	}
 	result, err = p.ExpectReedNextToken(tokenizer.ParmesanLiteral)
 	if err == nil {
@@ -25,25 +25,25 @@ func (p *Parser) ParseLiteralExpression(global bool) ParserResult {
 		}
 		variable := expressions.ParmesanVariable{Value: int(intLiteral)}
 		expression := expressions.LiteralExpression{Literal: &variable}
-		return MakeParserResult(true, &expression, nil)
+		return p.MakeSuccessfulResult(&expression)
 	}
 	result, err = p.ExpectReedNextToken(tokenizer.MozzarellaLiteral)
 	if err == nil {
 		variable := expressions.MozzarellaVariable{Value: result.TokenVal}
 		expression := expressions.LiteralExpression{Literal: &variable}
-		return MakeParserResult(true, &expression, nil)
+		return p.MakeSuccessfulResult(&expression)
 	}
 	result, err = p.ExpectReedNextToken(tokenizer.FreshMilk)
 	if err == nil {
 		variable := expressions.MilkVariable{Value: true}
 		expression := expressions.LiteralExpression{Literal: &variable}
-		return MakeParserResult(true, &expression, nil)
+		return p.MakeSuccessfulResult(&expression)
 	}
 	result, err = p.ExpectReedNextToken(tokenizer.SpoiledMilk)
 	if err == nil {
 		variable := expressions.MilkVariable{Value: false}
 		expression := expressions.LiteralExpression{Literal: &variable}
-		return MakeParserResult(true, &expression, nil)
+		return p.MakeSuccessfulResult(&expression)
 	}
-	return MakeParserResult(false, nil, nil)
+	return p.MakeUnsuccessfulResult()
 }

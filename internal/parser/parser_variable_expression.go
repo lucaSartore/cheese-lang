@@ -28,11 +28,11 @@ func (p *Parser) parseVariableDeclaration(global bool) ParserResult {
 			p.ReadNextToken()
 			identifier, err := p.ExpectReedNextToken(tokenizer.Identifier)
 			if err != nil {
-				return MakeParserResult(true, nil, err)
+				return p.MakeSuccessfulResult(nil)
 			}
 			_, err = p.ExpectReedNextToken(tokenizer.AssignOperator)
 			if err != nil {
-				return MakeParserResult(true, nil, err)
+				return p.MakeSuccessfulResult(nil)
 			}
 
 			exprResult := p.ParseAnything(global)
@@ -41,8 +41,8 @@ func (p *Parser) parseVariableDeclaration(global bool) ParserResult {
 				return exprResult
 			}
 
-			if !exprResult.progressed {
-				return MakeParserResult(false, nil, fmt.Errorf("expected expression after assignment operator"))
+			if exprResult.Expression == nil {
+				return p.MakeErrorResult(fmt.Errorf("expected expression after assignment operator"))
 			}
 
 			var expression expressions.Expression = &expressions.VariableDeclarationExpression{
@@ -52,8 +52,8 @@ func (p *Parser) parseVariableDeclaration(global bool) ParserResult {
 				Global:   global,
 			}
 
-			return MakeParserResult(true, expression, nil)
+			return p.MakeSuccessfulResult(expression)
 		}
 	}
-	return MakeParserResult(false, nil, nil)
+	return p.MakeUnsuccessfulResult()
 }

@@ -7,9 +7,9 @@ import (
 	"testing"
 )
 
-func TestMozzarellaVariableParser(t *testing.T) {
-	testStr := "Mozzarella x = \"hello\" + \" \"  + \"world\""
-	tokens, err := tokenizer.Tokenize(testStr)
+func DoTestOnString(code string, variableToTest string, expectedValue expressions.VariableContainer, t *testing.T) {
+
+	tokens, err := tokenizer.Tokenize(code)
 
 	if err != nil {
 		t.Errorf("Error while tokenizing: %v", err)
@@ -20,7 +20,7 @@ func TestMozzarellaVariableParser(t *testing.T) {
 
 	parser := parser.MakeParser(tokens)
 
-	returnValue := parser.ParseAnything(true)
+	returnValue := parser.ParseAnything(false)
 
 	if returnValue.Error != nil {
 		t.Errorf("Error while parsing: %v", returnValue.Error)
@@ -39,72 +39,36 @@ func TestMozzarellaVariableParser(t *testing.T) {
 		return
 	}
 
-	variable, ok := context.GetVariable("x")
+	variable, ok := context.GetVariable(variableToTest)
 	if !ok {
 		t.Errorf("Variable not found")
 		return
 	}
 
-	if variable.Value.GetVariableType() != expressions.Mozzarella {
-		t.Errorf("Expected mozzarella variable")
-		return
-	}
-
-	value := variable.Value.(*expressions.MozzarellaVariable).Value
-
-	if value != "hello world" {
-		t.Errorf("Expected value: hello world, got: %v", value)
+	if !VerifyValueEquivalence(variable.Value, expectedValue) {
+		t.Errorf("Expected value: %v, got: %v", expectedValue, variable.Value)
 		return
 	}
 }
 
+func TestMozzarellaVariableParser(t *testing.T) {
+	code := "Mozzarella x = \"hello\" + \" \"  + \"world\""
+	DoTestOnString(code, "x", &expressions.MozzarellaVariable{Value: "hello world"}, t)
+}
+
 func TestParmesanVariableParser(t *testing.T) {
-	testStr := "Parmesan x = (100-((5 + 3) * 2)) * (11 - 1)"
-	tokens, err := tokenizer.Tokenize(testStr)
+	code := "Parmesan x = (100-((5 + 3) * 2)) * (11 - 1)"
+	DoTestOnString(code, "x", &expressions.ParmesanVariable{Value: 840}, t)
+}
 
-	if err != nil {
-		t.Errorf("Error while tokenizing: %v", err)
-		return
+func TestCodeBlock(t *testing.T) {
+	code := `
+	{
+		Mozzarella x = "hello";
+		Mozzarella y = "world";
+		Mozzarella z = "undefined";
+		z = x + " " + y;
 	}
-
-	context := expressions.MakeContext()
-
-	parser := parser.MakeParser(tokens)
-
-	returnValue := parser.ParseAnything(true)
-
-	if returnValue.Error != nil {
-		t.Errorf("Error while parsing: %v", returnValue.Error)
-		return
-	}
-
-	if returnValue.Expression == nil {
-		t.Errorf("Expect to parse an expression, but got nil")
-		return
-	}
-
-	_, err = returnValue.Expression.Evaluate(&context, &context)
-
-	if err != nil {
-		t.Errorf("Error while evaluating: %v", err)
-		return
-	}
-
-	variable, ok := context.GetVariable("x")
-	if !ok {
-		t.Errorf("Variable not found")
-		return
-	}
-
-	if variable.Value.GetVariableType() != expressions.Parmesan {
-		t.Errorf("Expected parmesan variable")
-		return
-	}
-
-	value := variable.Value.(*expressions.ParmesanVariable).Value
-
-	if value != 840 {
-		t.Errorf("Expected value: 840, got: %v", value)
-		return
-	}
+	`
+	DoTestOnString(code, "z", &expressions.MozzarellaVariable{Value: "hello world"}, t)
 }

@@ -4,7 +4,8 @@ import (
 	"cheese-lang/internal/expressions"
 	"cheese-lang/internal/expressions/operators"
 	"cheese-lang/internal/tokenizer"
-	"fmt"
+
+	"github.com/go-errors/errors"
 )
 
 type OperatorTuple struct {
@@ -74,7 +75,7 @@ func (p *Parser) parseTwoToOneOperator(global bool) ParserResult {
 	}
 
 	if rightValueResult.Expression == nil {
-		return p.MakeErrorResult(fmt.Errorf("expected value after operator %s", token.TokenType.String()))
+		return p.MakeErrorResult(errors.Errorf("expected value after operator %s", token.TokenType.String()))
 	}
 
 	rightValue := rightValueResult.Expression

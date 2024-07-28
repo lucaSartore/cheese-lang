@@ -3,8 +3,8 @@ package parser
 import (
 	"cheese-lang/internal/expressions"
 	"cheese-lang/internal/tokenizer"
-	"fmt"
-	// "fmt"
+
+	"github.com/go-errors/errors"
 )
 
 func (p *Parser) parseCodeExpression(global bool) ParserResult {
@@ -16,7 +16,7 @@ func (p *Parser) parseCodeExpression(global bool) ParserResult {
 	closeBracketIndex := p.FindMatchingCurlingBrackets(p.IndexTmp)
 
 	if closeBracketIndex == -1 {
-		return p.MakeErrorResult(fmt.Errorf("could not find closing bracket of code expression"))
+		return p.MakeErrorResult(errors.Errorf("could not find closing bracket of code expression"))
 	}
 
 	var expressionsList []expressions.Expression = make([]expressions.Expression, 0)

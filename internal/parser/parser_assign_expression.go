@@ -3,7 +3,8 @@ package parser
 import (
 	"cheese-lang/internal/expressions"
 	"cheese-lang/internal/tokenizer"
-	"fmt"
+
+	"github.com/go-errors/errors"
 )
 
 func (p *Parser) parseAssignExpression(global bool) ParserResult {
@@ -14,7 +15,7 @@ func (p *Parser) parseAssignExpression(global bool) ParserResult {
 		identifier, err := p.ExpectReedNextToken(tokenizer.Identifier)
 
 		if err != nil {
-			return p.MakeErrorResult(fmt.Errorf("expected identifier"))
+			return p.MakeErrorResult(errors.Errorf("expected identifier"))
 		}
 
 		identifiers = append(identifiers, identifier.TokenVal)
@@ -38,7 +39,7 @@ func (p *Parser) parseAssignExpression(global bool) ParserResult {
 	}
 
 	if rightValueResult.Expression == nil {
-		return p.MakeErrorResult(fmt.Errorf("expected expression after assign operator"))
+		return p.MakeErrorResult(errors.Errorf("expected expression after assign operator"))
 	}
 
 	return p.MakeSuccessfulResult(&expressions.AssignExpression{VariablesToAssign: identifiers, ValueToAssign: rightValueResult.Expression})

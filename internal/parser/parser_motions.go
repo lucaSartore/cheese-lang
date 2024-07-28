@@ -2,8 +2,8 @@ package parser
 
 import (
 	"cheese-lang/internal/tokenizer"
-	"errors"
-	"fmt"
+
+	"github.com/go-errors/errors"
 )
 
 func (p *Parser) NextTokenMatch(token tokenizer.TokenType) bool {
@@ -38,7 +38,7 @@ func (p *Parser) ExpectReedNextToken(token tokenizer.TokenType) (tokenizer.Token
 	}
 	if t.TokenType != token {
 		p.IndexTmp--
-		return t, fmt.Errorf("expected token %s, got %s", token.String(), t.TokenType.String())
+		return t, errors.Errorf("expected token %s, got %s", token.String(), t.TokenType.String())
 	}
 	return t, nil
 }

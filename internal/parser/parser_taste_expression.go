@@ -3,7 +3,8 @@ package parser
 import (
 	"cheese-lang/internal/expressions"
 	"cheese-lang/internal/tokenizer"
-	"fmt"
+
+	"github.com/go-errors/errors"
 )
 
 func (p *Parser) parseTasteExpression(global bool) ParserResult {
@@ -15,7 +16,7 @@ func (p *Parser) parseTasteExpression(global bool) ParserResult {
 	}
 
 	if global {
-		return p.MakeErrorResult(fmt.Errorf("taste expressions are not allowed in global scope"))
+		return p.MakeErrorResult(errors.Errorf("taste expressions are not allowed in global scope"))
 	}
 
 	conditionResult := p.ParseAnything(global)
@@ -25,7 +26,7 @@ func (p *Parser) parseTasteExpression(global bool) ParserResult {
 	}
 
 	if conditionResult.Expression == nil {
-		return p.MakeErrorResult(fmt.Errorf("expected expression after taste keyword"))
+		return p.MakeErrorResult(errors.Errorf("expected expression after taste keyword"))
 	}
 
 	blockResult := p.parseCodeExpression(global)
@@ -35,7 +36,7 @@ func (p *Parser) parseTasteExpression(global bool) ParserResult {
 	}
 
 	if blockResult.Expression == nil {
-		return p.MakeErrorResult(fmt.Errorf("expected block after taste expression"))
+		return p.MakeErrorResult(errors.Errorf("expected block after taste expression"))
 	}
 
 	return p.MakeSuccessfulResult(&expressions.TasteExpression{Condition: conditionResult.Expression, Code: blockResult.Expression})

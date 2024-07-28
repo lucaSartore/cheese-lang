@@ -3,7 +3,8 @@ package parser
 import (
 	"cheese-lang/internal/expressions"
 	"cheese-lang/internal/tokenizer"
-	"fmt"
+
+	"github.com/go-errors/errors"
 )
 
 func (p *Parser) parseVariableDeclaration(global bool) ParserResult {
@@ -32,7 +33,7 @@ func (p *Parser) parseVariableDeclaration(global bool) ParserResult {
 		}
 
 		if exprResult.Expression == nil {
-			return p.MakeErrorResult(fmt.Errorf("expected expression after assignment operator"))
+			return p.MakeErrorResult(errors.Errorf("expected expression after assignment operator"))
 		}
 
 		var expression expressions.Expression = &expressions.VariableDeclarationExpression{

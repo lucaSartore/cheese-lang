@@ -28,7 +28,8 @@ var operatorTokens []tokenizer.TokenType = Map(Operators, func(v OperatorTuple) 
 
 func (p *Parser) parseTwoToOneOperator(global bool) ParserResult {
 
-	leftValueResult := p.ParseAnything(global)
+	// skip the tow to one operator stage to avoid infinite recursion
+	leftValueResult := p.ParseBySkippingStages(global, []ParsingStageType{TwoToOneOperatorStage})
 
 	if leftValueResult.Error != nil {
 		return leftValueResult
@@ -41,10 +42,12 @@ func (p *Parser) parseTwoToOneOperator(global bool) ParserResult {
 	leftValue := leftValueResult.Expression
 
 	// in this case this is not a two to one operator, however we can return the left value
-	if p.NextTokenMatchMultiple(operatorTokens) == false {
+	// this is not necessary but it improves the performance
+	if !p.NextTokenMatchMultiple(operatorTokens) {
 		return leftValueResult
 	}
 
+	// i am now sure that the next token is an operator, tanks to the previous check
 	token, err := p.ReadNextToken()
 
 	if err != nil {

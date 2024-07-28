@@ -6,20 +6,6 @@ import (
 	"fmt"
 )
 
-func tokenToType(token tokenizer.TokenType) expressions.VariableType {
-	switch token {
-	case tokenizer.MozzarellaType:
-		return expressions.Mozzarella
-	case tokenizer.GorgonzolaType:
-		return expressions.Gorgonzola
-	case tokenizer.MilkType:
-		return expressions.Milk
-	case tokenizer.ParmesanType:
-		return expressions.Parmesan
-	}
-	panic(fmt.Sprintf("Unknown token type %v", token))
-}
-
 func (p *Parser) parseVariableDeclaration(global bool) ParserResult {
 	tokens := []tokenizer.TokenType{tokenizer.MozzarellaType, tokenizer.GorgonzolaType, tokenizer.MilkType, tokenizer.ParmesanType}
 

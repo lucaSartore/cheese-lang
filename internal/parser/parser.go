@@ -43,9 +43,18 @@ const (
 	BracketsParsingStage     ParsingStageType = 3
 	AssignExpressionStage    ParsingStageType = 4
 	CodeExpressionsStage     ParsingStageType = 5
+	TasteExpression          ParsingStageType = 6
 )
 
-var AllParsingStages = []ParsingStageType{TwoToOneOperatorStage, VariableDeclarationStage, LiteralExpressionStage, BracketsParsingStage, AssignExpressionStage, CodeExpressionsStage}
+var AllParsingStages = []ParsingStageType{
+	TwoToOneOperatorStage,
+	VariableDeclarationStage,
+	LiteralExpressionStage,
+	BracketsParsingStage,
+	AssignExpressionStage,
+	CodeExpressionsStage,
+	TasteExpression,
+}
 
 func (p *Parser) ExecuteParsingStage(stage ParsingStageType, global bool) ParserResult {
 	switch stage {
@@ -61,6 +70,8 @@ func (p *Parser) ExecuteParsingStage(stage ParsingStageType, global bool) Parser
 		return p.parseAssignExpression(global)
 	case CodeExpressionsStage:
 		return p.parseCodeExpression(global)
+	case TasteExpression:
+		return p.parseTasteExpression(global)
 	default:
 		panic("Unknown parsing stage")
 	}

@@ -44,7 +44,7 @@ note that is not possible to declare a variable and leave it uninitialized
     ```
     taste <condition>{
         <block>
-    };
+    }
     ```
  - `recipe` (function)
     ```
@@ -52,7 +52,7 @@ note that is not possible to declare a variable and leave it uninitialized
     recipe <name>(<type param 1> <name param 1>, <type param 2> <name param 2>, ...) -> <return type 1>, <return type 2>, ... {
         <block>
         prepare <return value>;
-    };
+    }
     
     // call
     <return 1> ,<return 2>, ... = <name>(<param 1>, <param 2>, ...);
@@ -64,7 +64,7 @@ note that is not possible to declare a variable and leave it uninitialized
         taste <condition> {
             drain // break;
         }
-    };
+    }
     ```
 ### Structure
 

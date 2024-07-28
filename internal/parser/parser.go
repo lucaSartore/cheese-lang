@@ -13,16 +13,6 @@ type Parser struct {
 	GlobalContext *expressions.Context
 }
 
-type ParserResult struct {
-	ParsedTokens int                    // number of tokens that have been parsed
-	Expression   expressions.Expression // return of the expression result
-	Error        error                  // error because of malformed input
-}
-
-func MakeParserResult(parsedTokens int, expression expressions.Expression, error error) ParserResult {
-	return ParserResult{ParsedTokens: parsedTokens, Expression: expression, Error: error}
-}
-
 func MakeParser(tokens []tokenizer.Token, globalContext *expressions.Context) Parser {
 	return Parser{Tokens: tokens, Index: 0, IndexTmp: 0, GlobalContext: globalContext}
 }
@@ -69,7 +59,7 @@ func (p *Parser) ExecuteParsingStage(stage ParsingStageType, global bool) Parser
 	}
 }
 
-func ParseBySkippingStages(p *Parser, global bool, stagesToSkip []ParsingStageType) ParserResult {
+func (p *Parser) ParseBySkippingStages(global bool, stagesToSkip []ParsingStageType) ParserResult {
 	for _, stage := range AllParsingStages {
 
 		if contains(stagesToSkip, stage) {
@@ -95,21 +85,5 @@ func ParseBySkippingStages(p *Parser, global bool, stagesToSkip []ParsingStageTy
 }
 
 func (p *Parser) ParseAnything(global bool) ParserResult {
-	return ParseBySkippingStages(p, global, []ParsingStageType{})
-}
-
-func (p *Parser) MakeSuccessfulResult(expression expressions.Expression) ParserResult {
-	advancedTokens := p.IndexTmp - p.Index
-	if advancedTokens == 0 {
-		panic("Trying to make a successful result without advancing the index")
-	}
-	return MakeParserResult(advancedTokens, expression, nil)
-}
-
-func (p *Parser) MakeUnsuccessfulResult() ParserResult {
-	return MakeParserResult(0, nil, nil)
-}
-
-func (p *Parser) MakeErrorResult(err error) ParserResult {
-	return MakeParserResult(0, nil, err)
+	return p.ParseBySkippingStages(global, []ParsingStageType{})
 }

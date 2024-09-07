@@ -1,5 +1,4 @@
 package parser
-
 import (
 	"cheese-lang/internal/expressions"
 	"cheese-lang/internal/tokenizer"

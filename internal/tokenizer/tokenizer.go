@@ -283,7 +283,7 @@ func TryReadKeyword(input []byte) (Token, uint) {
 	keyword_length := uint(0)
 
 	for _, c := range input {
-		if !IsValidKeywordStartChar(c) {
+		if !IsValidKeywordChar(c) {
 			break
 		}
 		keyword_length++

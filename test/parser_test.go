@@ -83,3 +83,22 @@ func TestCodeBlock(t *testing.T) {
 	`
 	DoTestOnString(code, "z", &expressions.MozzarellaVariable{Value: "hello world"}, t)
 }
+
+func TestTasteBlock(t *testing.T) {
+	code := `
+		{
+        	Parmesan x = 100;
+        	Milk c1 = spoiled;
+        	Milk c2 = spoiled;
+        	taste parmesan > 50 {
+            	c1 = fresh;
+        	}
+        	taste parmesan <= 50 {
+            	c2 = fresh;
+        	}
+        
+        	Milk success = (c1 == fresh) && (c2 == spoiled)
+		}
+    `
+	DoTestOnString(code, "success", &expressions.MilkVariable{Value: true}, t)
+}

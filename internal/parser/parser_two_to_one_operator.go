@@ -30,7 +30,7 @@ var operatorTokens []tokenizer.TokenType = Map(Operators, func(v OperatorTuple) 
 func (p *Parser) parseTwoToOneOperator(global bool) ParserResult {
 
 	// skip the tow to one operator stage to avoid infinite recursion
-	leftValueResult := p.ParseBySkippingStages(global, []ParsingStageType{TwoToOneOperatorStage})
+	leftValueResult := p.ParseBySkippingStages(global, []ParsingStageType{TwoToOneOperatorStage, CodeExpressionsStage})
 
 	if leftValueResult.Error != nil {
 		return leftValueResult

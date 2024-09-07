@@ -11,6 +11,10 @@ func (p *Parser) parseAssignExpression(global bool) ParserResult {
 
 	var identifiers []string = make([]string, 0)
 
+	if !p.NextTokenMatch(tokenizer.Identifier) {
+		return p.MakeUnsuccessfulResult()
+	}
+
 	for {
 		identifier, err := p.ExpectReedNextToken(tokenizer.Identifier)
 

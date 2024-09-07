@@ -9,11 +9,13 @@ import (
 
 func (p *Parser) parseCodeExpression(global bool) ParserResult {
 
-	if !p.NextTokenMatch(tokenizer.OpenBracket) {
+	if !p.NextTokenMatch(tokenizer.OpenCurlyBracket) {
 		return p.MakeUnsuccessfulResult()
 	}
 
 	closeBracketIndex := p.FindMatchingCurlingBrackets(p.IndexTmp)
+
+	p.ExpectReedNextToken(tokenizer.OpenCurlyBracket)
 
 	if closeBracketIndex == -1 {
 		return p.MakeErrorResult(errors.Errorf("could not find closing bracket of code expression"))
@@ -53,7 +55,7 @@ func (p *Parser) parseCodeExpression(global bool) ParserResult {
 		}
 	}
 
-	_, err := p.ExpectReedNextToken(tokenizer.CloseBracket)
+	_, err := p.ExpectReedNextToken(tokenizer.CloseCurlyBracket)
 
 	if err != nil {
 		panic("assertion 1 fail in parseCodeExpression")

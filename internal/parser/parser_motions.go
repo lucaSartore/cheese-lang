@@ -101,5 +101,5 @@ func (p *Parser) FindMatchingBrackets(start int) int {
 }
 
 func (p *Parser) FindMatchingCurlingBrackets(start int) int {
-	return p.FindNextMatchingCupuleOfTokens(start, tokenizer.OpenCurlyBracket, tokenizer.CloseBracket)
+	return p.FindNextMatchingCupuleOfTokens(start, tokenizer.OpenCurlyBracket, tokenizer.CloseCurlyBracket)
 }

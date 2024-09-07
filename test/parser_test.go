@@ -5,14 +5,25 @@ import (
 	"cheese-lang/internal/parser"
 	"cheese-lang/internal/tokenizer"
 	"testing"
+
+	"github.com/go-errors/errors"
 )
+
+func PrintErrorWithStack(message string, t *testing.T, err error) {
+	err2, ok := err.(*errors.Error)
+	if ok {
+		t.Errorf("%v: %v\nTrace: %v", message, err2, err2.ErrorStack())
+	} else {
+		t.Errorf("%v: %v", message, err)
+	}
+}
 
 func DoTestOnString(code string, variableToTest string, expectedValue expressions.VariableContainer, t *testing.T) {
 
 	tokens, err := tokenizer.Tokenize(code)
 
 	if err != nil {
-		t.Errorf("Error while tokenizing: %v", err)
+		PrintErrorWithStack("Error while tokenizing", t, err)
 		return
 	}
 
@@ -23,7 +34,7 @@ func DoTestOnString(code string, variableToTest string, expectedValue expression
 	returnValue := parser.ParseAnything(false)
 
 	if returnValue.Error != nil {
-		t.Errorf("Error while parsing: %v", returnValue.Error)
+		PrintErrorWithStack("Error while parsing", t, returnValue.Error)
 		return
 	}
 
@@ -35,7 +46,7 @@ func DoTestOnString(code string, variableToTest string, expectedValue expression
 	_, err = returnValue.Expression.Evaluate(&context, &context)
 
 	if err != nil {
-		t.Errorf("Error while evaluating: %v", err)
+		PrintErrorWithStack("Error while evaluating", t, err)
 		return
 	}
 

@@ -44,7 +44,9 @@ const (
 	AssignExpressionStage    ParsingStageType = 4
 	CodeExpressionsStage     ParsingStageType = 5
 	TasteExpression          ParsingStageType = 6
-    VariableExpressionStage  ParsingStageType = 7
+    CuddleExpression         ParsingStageType = 7
+    BrakeExpression          ParsingStageType = 8
+    VariableExpressionStage  ParsingStageType = 9
 )
 
 var AllParsingStages = []ParsingStageType{
@@ -55,6 +57,8 @@ var AllParsingStages = []ParsingStageType{
 	AssignExpressionStage,
 	CodeExpressionsStage,
 	TasteExpression,
+    CuddleExpression,
+    BrakeExpression,
     VariableExpressionStage,
 }
 
@@ -74,6 +78,10 @@ func (p *Parser) ExecuteParsingStage(stage ParsingStageType, global bool) Parser
 		return p.parseCodeExpression(global)
 	case TasteExpression:
 		return p.parseTasteExpression(global)
+    case BrakeExpression:
+        return p.parseBrakeExpression(global)
+    case CuddleExpression:
+        return p.parserCuddleExpression(global)
     case VariableExpressionStage:
         return p.parseVariable(global)
 	default:

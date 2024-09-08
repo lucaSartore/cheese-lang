@@ -102,3 +102,18 @@ func TestTasteBlock(t *testing.T) {
     `
 	DoTestOnString(code, "success", &expressions.MilkVariable{Value: true}, t)
 }
+func TestCuddleBlock(t *testing.T) {
+	code := `
+		{
+            Parmesan x = 0;
+            curdle {
+                x = x + 1;
+                
+                taste x == 50 {
+                    drain;        
+                }
+            }
+		}
+    `
+	DoTestOnString(code, "x", &expressions.ParmesanVariable{Value: 50}, t)
+}

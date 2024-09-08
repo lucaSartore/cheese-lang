@@ -23,12 +23,17 @@ var Operators = []OperatorTuple{
 	{tokenizer.OrOperator, operators.OrOperator},
 	{tokenizer.AndOperator, operators.AndOperator},
 	{tokenizer.ExorOperator, operators.ExorOperator},
+    {tokenizer.LessOperator, operators.LessOperator},
+    {tokenizer.GreaterOperator, operators.GreaterOperator},
+    {tokenizer.LessEqualOperator, operators.LessEqualOperator},
+    {tokenizer.GreaterEqualOperator, operators.GreaterEqualOperator},
 }
+
 
 var operatorTokens []tokenizer.TokenType = Map(Operators, func(v OperatorTuple) tokenizer.TokenType { return v.OperatorToken })
 
 func (p *Parser) parseTwoToOneOperator(global bool) ParserResult {
-
+    
 	// skip the tow to one operator stage to avoid infinite recursion
 	leftValueResult := p.ParseBySkippingStages(global, []ParsingStageType{TwoToOneOperatorStage, CodeExpressionsStage})
 

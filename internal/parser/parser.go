@@ -37,16 +37,19 @@ func (p *Parser) GetNextParserRegion() (Parser, bool) {
 type ParsingStageType int
 
 const (
-	TwoToOneOperatorStage    ParsingStageType = 0
-	VariableDeclarationStage ParsingStageType = 1
-	LiteralExpressionStage   ParsingStageType = 2
-	BracketsParsingStage     ParsingStageType = 3
-	AssignExpressionStage    ParsingStageType = 4
-	CodeExpressionsStage     ParsingStageType = 5
-	TasteExpression          ParsingStageType = 6
-    CuddleExpression         ParsingStageType = 7
-    BrakeExpression          ParsingStageType = 8
-    VariableExpressionStage  ParsingStageType = 9
+	TwoToOneOperatorStage              ParsingStageType = 0
+	VariableDeclarationStage           ParsingStageType = 1
+	LiteralExpressionStage             ParsingStageType = 2
+	BracketsParsingStage               ParsingStageType = 3
+	AssignExpressionStage              ParsingStageType = 4
+	CodeExpressionsStage               ParsingStageType = 5
+	TasteExpression                    ParsingStageType = 6
+	CuddleExpression                   ParsingStageType = 7
+	BrakeExpression                    ParsingStageType = 8
+	FunctionDeclarationExpressionStage ParsingStageType = 9
+	FunctionCallExpressionStage        ParsingStageType = 10
+	VariableExpressionStage            ParsingStageType = 11
+    ReturnExpressionStage              ParsingStageType = 12
 )
 
 var AllParsingStages = []ParsingStageType{
@@ -57,9 +60,12 @@ var AllParsingStages = []ParsingStageType{
 	AssignExpressionStage,
 	CodeExpressionsStage,
 	TasteExpression,
-    CuddleExpression,
-    BrakeExpression,
-    VariableExpressionStage,
+	CuddleExpression,
+	BrakeExpression,
+    FunctionDeclarationExpressionStage,
+    FunctionCallExpressionStage,
+	VariableExpressionStage,
+    ReturnExpressionStage,
 }
 
 func (p *Parser) ExecuteParsingStage(stage ParsingStageType, global bool) ParserResult {
@@ -78,12 +84,18 @@ func (p *Parser) ExecuteParsingStage(stage ParsingStageType, global bool) Parser
 		return p.parseCodeExpression(global)
 	case TasteExpression:
 		return p.parseTasteExpression(global)
-    case BrakeExpression:
-        return p.parseBrakeExpression(global)
-    case CuddleExpression:
-        return p.parserCuddleExpression(global)
-    case VariableExpressionStage:
-        return p.parseVariable(global)
+	case BrakeExpression:
+		return p.parseBrakeExpression(global)
+	case CuddleExpression:
+		return p.parserCuddleExpression(global)
+    case FunctionDeclarationExpressionStage:
+        return p.ParseFunctionDeclaration(global)
+    case FunctionCallExpressionStage:
+        return p.parserFunctionCallExpression(global)
+	case VariableExpressionStage:
+		return p.parseVariable(global)
+    case ReturnExpressionStage:
+        return p.parsePr
 	default:
 		panic("Unknown parsing stage")
 	}

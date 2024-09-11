@@ -119,7 +119,7 @@ func TestCuddleBlock(t *testing.T) {
 }
 
 
-func FunctionTest( t *testing.T){
+func TestFunctionCall( t *testing.T){
     code := `
         {
             recipe factorial(Parmesan x){

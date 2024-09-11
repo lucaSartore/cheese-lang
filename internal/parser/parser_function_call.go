@@ -3,7 +3,6 @@ package parser
 import (
 	"cheese-lang/internal/expressions"
 	"cheese-lang/internal/tokenizer"
-	"github.com/go-errors/errors"
 )
 
 // reminder: the brake expression is called drain in the language
@@ -22,14 +21,14 @@ func (p *Parser) parserFunctionCallExpression (global bool) ParserResult {
         return p.MakeUnsuccessfulResult()
     }
 
-    expressoins := make([]expressions.Expression,0)
+    args := make([]expressions.Expression,0)
 
     for !p.NextTokenMatch(tokenizer.CloseBracket){
         arg := p.ParseAnything(global)
         if arg.Error != nil {
             return p.MakeErrorResult(arg.Error)
         }
-        expressoins = append(expressoins, arg.Expression)
+        args = append(args, arg.Expression)
         
         if p.NextTokenMatch(tokenizer.CloseBracket){
             continue
@@ -48,6 +47,10 @@ func (p *Parser) parserFunctionCallExpression (global bool) ParserResult {
         panic("Assertion 1 failed in parser function call")
     }
 
-    
+    function_call := expressions.FunctionCallExpression{
+        FunctionToCall: function_name.TokenVal,
+        Args: args,
+    }
 
+    return p.MakeSuccessfulResult(&function_call)
 }

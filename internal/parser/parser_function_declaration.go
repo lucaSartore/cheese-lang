@@ -30,9 +30,9 @@ func (p *Parser) ParseFunctionDeclaration(global bool) ParserResult {
 
     
     accetted_types := []tokenizer.TokenType{ tokenizer.MilkType, tokenizer.MozzarellaType, tokenizer.ParmesanType, tokenizer.GorgonzolaType}
-    for p.NextTokenMatch(tokenizer.CloseBracket){
+    for !p.NextTokenMatch(tokenizer.CloseBracket){
         if !p.NextTokenMatchMultiple(accetted_types){
-		    return p.MakeErrorResult(errors.Errorf("expected value after operator %s"))
+		    return p.MakeErrorResult(errors.Errorf("expected value after operator"))
         }
 
         arg_type_token, err := p.ReadNextToken()
@@ -54,7 +54,7 @@ func (p *Parser) ParseFunctionDeclaration(global bool) ParserResult {
             types = append(types, expressions.Milk)
         case tokenizer.MozzarellaType:
             types = append(types, expressions.Mozzarella)
-        case tokenizer.ParmesanLiteral:
+        case tokenizer.ParmesanType:
             types = append(types, expressions.Parmesan)
         case tokenizer.GorgonzolaType:
             types = append(types, expressions.Gorgonzola)

@@ -15,6 +15,10 @@ func (p *Parser) parseReturnExpression (global bool) ParserResult {
 		return p.MakeUnsuccessfulResult()
 	}
 
+    if global{
+        return p.MakeErrorResult(errors.New("impossible to prepare in global context"))
+    }
+
     returns_expressions := make([]expressions.Expression,0)
 
     for {
@@ -27,23 +31,12 @@ func (p *Parser) parseReturnExpression (global bool) ParserResult {
         if expression.Expression == nil {
             break
         }
+
+        returns_expressions = append(returns_expressions, expression.Expression)
         
         _, _ = p.ExpectReedNextToken(tokenizer.Comma)
     }
 
-    var return_expression expressions.Expression
-
-    if len(returns_expressions) == 0 {
-        return_expression = &expressions.LiteralExpression{Literal: &expressions.RicottaVariable{}}
-    }else if len(returns_expressions) == 1 {
-        return_expression = returns_expressions[1]
-    }else {
-        return_expression = &expressions.TupleVariableType
-    }
-
-	if global {
-		return p.MakeErrorResult(errors.Errorf("drain expressions are not allowed in global scope"))
-	}
-
-    returns := expressions.ReturnExpression{}
+    return p.MakeSuccessfulResult(&expressions.ReturnExpression{Expressions: returns_expressions})
+    
 }

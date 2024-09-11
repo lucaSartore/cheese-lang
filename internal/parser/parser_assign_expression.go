@@ -34,6 +34,11 @@ func (p *Parser) parseAssignExpression(global bool) ParserResult {
 		if !p.NextTokenMatch(tokenizer.Comma) {
 			return p.MakeUnsuccessfulResult()
 		}
+
+        _, err = p.ExpectReedNextToken(tokenizer.Comma)
+        if err != nil {
+            panic("assertion 1 fail in parser assign expression")
+        }
 	}
 
 	rightValueResult := p.ParseAnything(global)

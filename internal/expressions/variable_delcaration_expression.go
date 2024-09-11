@@ -32,7 +32,7 @@ func (exp *VariableDeclarationExpression) Evaluate(globalContext *Context, local
 	}
 
 	if res.Value.GetVariableType() != exp.Type {
-		return NullExpressionResult, fmt.Errorf("expected %v got type %v in creation ov variable %v", exp.Type, res.Value.GetVariableType(), exp.Name)
+		return NullExpressionResult, fmt.Errorf("expected %v got type %v in creation of variable %v", exp.Type, res.Value.GetVariableType(), exp.Name)
 	}
 
 	context.AddVariable(MakeVariable(exp.Name, res.Value))

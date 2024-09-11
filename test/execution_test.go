@@ -201,21 +201,23 @@ func TestFunction(t *testing.T) {
 						RightValue: &expressions.LiteralExpression{Literal: &expressions.ParmesanVariable{Value: 0}},
 					},
 					Code: &expressions.ReturnExpression{
-						Expression: &expressions.LiteralExpression{Literal: &expressions.ParmesanVariable{Value: 1}},
+                        Expressions: []expressions.Expression{&expressions.LiteralExpression{Literal: &expressions.ParmesanVariable{Value: 1}}},
 					},
 				},
 				&expressions.ReturnExpression{
-					Expression: &expressions.FunctionCallExpression{
-						FunctionToCall: "pow",
-						Args: []expressions.Expression{
-							&expressions.VariableExpression{Name: "base"},
-							&expressions.TwoToOneOperatorExpression{
-								Operator:   operators.SubOperator,
-								LeftValue:  &expressions.VariableExpression{Name: "exponent"},
-								RightValue: &expressions.LiteralExpression{Literal: &expressions.ParmesanVariable{Value: 1}},
-							},
-						},
-					},
+                    Expressions: []expressions.Expression{
+                        &expressions.FunctionCallExpression{
+                            FunctionToCall: "pow",
+                            Args: []expressions.Expression{
+                                &expressions.VariableExpression{Name: "base"},
+                                &expressions.TwoToOneOperatorExpression{
+                                    Operator:   operators.SubOperator,
+                                    LeftValue:  &expressions.VariableExpression{Name: "exponent"},
+                                    RightValue: &expressions.LiteralExpression{Literal: &expressions.ParmesanVariable{Value: 1}},
+                                },
+                            },
+                        },
+                    },
 				},
 			},
 		},

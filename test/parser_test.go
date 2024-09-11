@@ -19,9 +19,7 @@ func PrintErrorWithStack(message string, t *testing.T, err error) {
 }
 
 func DoTestOnString(code string, variableToTest string, expectedValue expressions.VariableContainer, t *testing.T) {
-
 	tokens, err := tokenizer.Tokenize(code)
-
 	if err != nil {
 		PrintErrorWithStack("Error while tokenizing", t, err)
 		return
@@ -44,7 +42,6 @@ func DoTestOnString(code string, variableToTest string, expectedValue expression
 	}
 
 	_, err = returnValue.Expression.Evaluate(&context, &context)
-
 	if err != nil {
 		PrintErrorWithStack("Error while evaluating", t, err)
 		return
@@ -102,6 +99,7 @@ func TestTasteBlock(t *testing.T) {
     `
 	DoTestOnString(code, "success", &expressions.MilkVariable{Value: true}, t)
 }
+
 func TestCuddleBlock(t *testing.T) {
 	code := `
 		{
@@ -118,23 +116,43 @@ func TestCuddleBlock(t *testing.T) {
 	DoTestOnString(code, "x", &expressions.ParmesanVariable{Value: 50}, t)
 }
 
-
-func TestFunctionCall( t *testing.T){
-    code := `
-        {
+func TestFunctionCall(t *testing.T) {
+	code := ` {
             recipe factorial(Parmesan x){
                 taste x == 1 {
-                    prepare 1
+                    prepare 1;
                 }
-                prepare x * factorial(x-1)
+                prepare x * factorial(x-1);
             }
 
             Milk success = (factorial(1) == 1 ) &&
                            (factorial(2) == 2 ) &&
                            (factorial(3) == 6 ) &&
                            (factorial(4) == 24 ) &&
-                           (factorial(5) == 120 )
+                           (factorial(5) == 120 );
+            Parmesan test = factorial(10);
         }
+
     `
+
 	DoTestOnString(code, "success", &expressions.MilkVariable{Value: true}, t)
+	DoTestOnString(code, "test", &expressions.ParmesanVariable{Value: 10 * 9 * 8 * 7 * 6 * 5 * 4 * 3 * 2}, t)
+}
+
+func TestMultipleReturns(t *testing.T) {
+	code := `
+        {
+            recipe perimeter_and_area_of_square(Parmesan side){
+                prepare side * 4, side * side;
+            }
+            
+            Parmesan area = 0;
+            Parmesan perimeter = 0;
+            perimeter,area = perimeter_and_area_of_square(10);
+        }
+
+    `
+
+	DoTestOnString(code, "area", &expressions.ParmesanVariable{Value: 100}, t)
+	DoTestOnString(code, "perimeter", &expressions.ParmesanVariable{Value: 40}, t)
 }

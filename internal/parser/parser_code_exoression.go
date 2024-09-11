@@ -42,8 +42,9 @@ func (p *Parser) parseCodeExpression(global bool) ParserResult {
 		_, isCodeExpression := newExpression.(*expressions.CodeExpression)
 		_, isTasteExpression := newExpression.(*expressions.TasteExpression)
 		_, isCuddleExpression := newExpression.(*expressions.CuddleExpression)
+		_, isFunctionDeclarationExpression := newExpression.(*expressions.FunctionDeclaration)
 
-		if !isCodeExpression && !isTasteExpression && !isCuddleExpression {
+        if !isCodeExpression && !isTasteExpression && !isCuddleExpression && !isFunctionDeclarationExpression{
 			_, err := p.ExpectReedNextToken(tokenizer.SemiColon)
 			if err != nil {
 				return p.MakeErrorResult(err)

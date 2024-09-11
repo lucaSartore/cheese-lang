@@ -95,7 +95,7 @@ func (p *Parser) ExecuteParsingStage(stage ParsingStageType, global bool) Parser
 	case VariableExpressionStage:
 		return p.parseVariable(global)
     case ReturnExpressionStage:
-        return p.parsePr
+        return p.parseReturnExpression(global)
 	default:
 		panic("Unknown parsing stage")
 	}

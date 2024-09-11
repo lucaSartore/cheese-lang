@@ -13,7 +13,7 @@ func Tokenize(input string) ([]Token, error) {
 	for {
 		token, err := TokenizeSingle(inputBuffer)
 
-		if token.TokenType != NullToken {
+		if token.TokenType != NullToken && token.TokenType != Comment {
 			tokens = append(tokens, token)
 		}
 
@@ -24,8 +24,9 @@ func Tokenize(input string) ([]Token, error) {
 		if err != nil {
 			return tokens, err
 		}
-
 	}
+
+
 	return tokens, nil
 }
 

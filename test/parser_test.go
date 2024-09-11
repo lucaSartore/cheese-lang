@@ -117,3 +117,24 @@ func TestCuddleBlock(t *testing.T) {
     `
 	DoTestOnString(code, "x", &expressions.ParmesanVariable{Value: 50}, t)
 }
+
+
+func FunctionTest( t *testing.T){
+    code := `
+        {
+            recipe factorial(Parmesan x){
+                taste x == 1 {
+                    prepare 1
+                }
+                prepare x * factorial(x-1)
+            }
+
+            Milk success = (factorial(1) == 1 ) &&
+                           (factorial(2) == 2 ) &&
+                           (factorial(3) == 6 ) &&
+                           (factorial(4) == 24 ) &&
+                           (factorial(5) == 120 )
+        }
+    `
+	DoTestOnString(code, "success", &expressions.MilkVariable{Value: true}, t)
+}

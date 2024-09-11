@@ -22,3 +22,18 @@ func MakeFunction(name string, code Expression, argumentsType []VariableType, ar
 		ArgumentsNames: argumentsNames,
 	}
 }
+
+type FunctionDeclaration struct {
+    Function Function
+    Global bool
+}
+
+
+func (exp *FunctionDeclaration) Evaluate(globalContext *Context, localContext *Context) (ExpressionResult, error) {
+    if exp.Global{
+        globalContext.AddFunction(exp.Function)
+    }else{
+        localContext.AddFunction(exp.Function)
+    }
+    return NullExpressionResult, nil
+}

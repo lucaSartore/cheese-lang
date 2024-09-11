@@ -49,7 +49,7 @@ note that is not possible to declare a variable and leave it uninitialized
  - `recipe` (function)
     ```
     // declaration
-    recipe <name>(<type param 1> <name param 1>, <type param 2> <name param 2>, ...) -> <return type 1>, <return type 2>, ... {
+    recipe <name>(<type param 1> <name param 1>, <type param 2> <name param 2>, ...) {
         <block>
         prepare <return value>;
     }

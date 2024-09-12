@@ -60,7 +60,7 @@ func TokenizeSingle(input *bytes.Buffer) (Token, error) {
 func AdvanceWitheSpace(input []byte) (Token, uint) {
 	count := uint(0)
 	for _, b := range input {
-		if b == ' ' || b == '\t' || b == '\n' {
+		if b == ' ' || b == '\t' || b == '\n' || b == '\r'{
 			count++
 		} else {
 			break
@@ -152,7 +152,7 @@ func TryReadComment(input []byte) (Token, uint) {
 
 	for _, c := range input[2:] {
 		count++
-		if c == '\n' {
+		if c == '\n' || c == '\r' {
 			break
 		}
 	}

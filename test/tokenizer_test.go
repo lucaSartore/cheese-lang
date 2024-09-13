@@ -1,6 +1,4 @@
-package test
-
-import (
+package test import (
 	"cheese-lang/internal/tokenizer"
 	"fmt"
 	"testing"

@@ -8,11 +8,7 @@ import (
 	"cheese-lang/internal/expressions"
 )
 
-
-
 func main() {
-   
-    fmt.Println("welcome to cheeselang")
 
     if len(os.Args) < 2 {
         fmt.Print("you need to specify a source file in order to run cheeselang")
@@ -68,5 +64,4 @@ func main() {
         fmt.Printf("runtime error: %v",err)
     }
 
-    // print(return_value)
 }

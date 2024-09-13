@@ -146,4 +146,24 @@ var mozzarellaToGorgonzolaFunc = Function{
     Code: &mozzarellaToGorgonzola{}, 
 }
 
-var StandardLibrary = []Function{parmesanToGorgonzolaFunc,parmesanToMozzarellaFunc,gorgonzolaToParmesanFunc,gorgonzolaToMozzarellaFunc, mozzarellaToGorgonzolaFunc, mozzarellaToParmesanFunc}
+
+type serve struct{}
+func (fc *serve ) Evaluate(globalContext *Context, localContext *Context) (ExpressionResult, error) {
+    return Wrapper(
+        func(v *MozzarellaVariable) (VariableContainer, error) {
+            fmt.Print(v.Value)
+            return &RicottaVariable{}, nil
+        },
+        localContext,
+        "x",
+    )
+}
+var serveFunction = Function{
+    Name: "serve",
+    ArgumentsType: []VariableType{Mozzarella},
+    ArgumentsNames: []string{"x"},
+    Code: &serve{}, 
+}
+
+
+var StandardLibraryFunctions = []Function{parmesanToGorgonzolaFunc,parmesanToMozzarellaFunc,gorgonzolaToParmesanFunc,gorgonzolaToMozzarellaFunc, mozzarellaToGorgonzolaFunc, mozzarellaToParmesanFunc,serveFunction}

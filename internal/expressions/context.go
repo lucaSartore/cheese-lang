@@ -12,6 +12,14 @@ func MakeContext() Context {
 	}
 }
 
+func MakeContextWithStd() Context{
+    context := MakeContext()
+    for _, val := range StandardLibraryFunctions{
+        context.AddFunction(val)
+    }
+    return context
+}
+
 func (c *Context) AddFunction(f Function) {
 	c.Functions[f.Name] = f
 }

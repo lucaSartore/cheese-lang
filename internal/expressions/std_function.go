@@ -22,7 +22,7 @@ func Wrapper[T VariableContainer](action ActionFunction[T], context *Context, in
     if err != nil {
         return NullExpressionResult, err
     }
-    return ExpressionResult{Value: res, Brake: false, Return: false}, nil
+    return ExpressionResult{Value: res, Brake: false, Return: true}, nil
 }
 
 type parmesanToGorgonzola struct{}
@@ -140,7 +140,7 @@ func (fc *mozzarellaToGorgonzola ) Evaluate(globalContext *Context, localContext
     )
 }
 var mozzarellaToGorgonzolaFunc = Function{
-    Name: "m_to_p",
+    Name: "m_to_g",
     ArgumentsType: []VariableType{Mozzarella},
     ArgumentsNames: []string{"x"},
     Code: &mozzarellaToGorgonzola{}, 

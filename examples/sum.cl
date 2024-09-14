@@ -1,3 +1,0 @@
-recipe main(){
-    prepare;
-}

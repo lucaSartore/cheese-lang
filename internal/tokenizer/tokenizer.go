@@ -6,14 +6,14 @@ import (
 	"regexp"
 )
 
-func Tokenize(input string) ([]Token, error) {
+func Tokenize(input string, exclude_comments bool) ([]Token, error) {
 	// todo: check tat the string is made of only asci characters... utf8 characters may brake this tokenizer
 	inputBuffer := bytes.NewBuffer([]byte(input))
 	tokens := []Token{}
 	for {
 		token, err := TokenizeSingle(inputBuffer)
 
-		if token.TokenType != NullToken && token.TokenType != Comment {
+		if token.TokenType != NullToken && (token.TokenType != Comment || !exclude_comments) {
 			tokens = append(tokens, token)
 		}
 

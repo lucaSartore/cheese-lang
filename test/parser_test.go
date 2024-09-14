@@ -19,7 +19,7 @@ func PrintErrorWithStack(message string, t *testing.T, err error) {
 }
 
 func DoTestOnString(code string, variableToTest string, expectedValue expressions.VariableContainer, t *testing.T) {
-	tokens, err := tokenizer.Tokenize(code)
+	tokens, err := tokenizer.Tokenize(code,true)
 	if err != nil {
 		PrintErrorWithStack("Error while tokenizing", t, err)
 		return

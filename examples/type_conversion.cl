@@ -22,9 +22,24 @@ recipe main(){
     // 34.5678
     Gorgonzola c3 = 0.0;
     c3, ok = m_to_g(c2);
+    taste ok == spoiled {
+        prepare -1;
+    }
     
     Gorgonzola e = 0.0;
+
+    e, ok = m_to_g("34.a");
+    taste ok == fresh {
+        prepare -1;
+    }
+
+
     e, ok = m_to_g("34.0");
+    taste ok == spoiled {
+        prepare -1;
+    }
+
+
     // 0.005678
     c3 = (c3 - e)/100.0;
 
@@ -32,12 +47,16 @@ recipe main(){
     Gorgonzola d2 = 0.0;
     d2, ok = m_to_g(d);
 
+    taste ok == spoiled {
+        prepare -1;
+    }
+
     // 12.345678
     Gorgonzola final = d2 + c3;
     
-    Mozzarella result = "Test 12.345678 == " + g_to_m(final);
+    Mozzarella result = "Test 12.345678 == " + g_to_m(final) + "\n";
     
     serve(result);
 
-    prepare;
+    prepare 0;
 }

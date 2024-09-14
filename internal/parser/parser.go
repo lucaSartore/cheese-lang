@@ -50,6 +50,7 @@ const (
 	FunctionCallExpressionStage        ParsingStageType = 10
 	VariableExpressionStage            ParsingStageType = 11
     ReturnExpressionStage              ParsingStageType = 12
+    OneToOneOperatorExpressionStage    ParsingStageType = 13
 )
 
 var AllParsingStages = []ParsingStageType{
@@ -66,6 +67,7 @@ var AllParsingStages = []ParsingStageType{
     FunctionCallExpressionStage,
 	VariableExpressionStage,
     ReturnExpressionStage,
+    OneToOneOperatorExpressionStage,
 }
 
 func (p *Parser) ExecuteParsingStage(stage ParsingStageType, global bool) ParserResult {
@@ -96,6 +98,8 @@ func (p *Parser) ExecuteParsingStage(stage ParsingStageType, global bool) Parser
 		return p.parseVariable(global)
     case ReturnExpressionStage:
         return p.parseReturnExpression(global)
+    case OneToOneOperatorExpressionStage:
+        return p.parseOneToOneOperator(global)
 	default:
 		panic("Unknown parsing stage")
 	}

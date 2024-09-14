@@ -1,4 +1,6 @@
-package test import (
+package test 
+
+import (
 	"cheese-lang/internal/tokenizer"
 	"fmt"
 	"testing"
@@ -6,7 +8,7 @@ package test import (
 
 func TestTokenizer1(t *testing.T) {
 	s := "//this is a comment\n == = != && ^{    }\t	\n\n \t  -="
-	tokens, err := tokenizer.Tokenize(s)
+	tokens, err := tokenizer.Tokenize(s,false)
 
 	if err != nil {
 		t.Error(err)
@@ -32,7 +34,7 @@ func TestTokenizer1(t *testing.T) {
 func TestTokenizer2(t *testing.T) {
 	s := "   Mozzarella Gorgonzola 	\"literal\" \"literal\\n \\\\ \\t \\\"\""
 
-	tokens, err := tokenizer.Tokenize(s)
+	tokens, err := tokenizer.Tokenize(s,false)
 
 	if err != nil {
 		t.Error(err)
@@ -162,7 +164,7 @@ func TestTokenizer3(t *testing.T) {
 		tokenizer.MakeToken(tokenizer.CloseCurlyBracket),
 	}
 
-	tokens, err := tokenizer.Tokenize(s)
+	tokens, err := tokenizer.Tokenize(s,false)
 
 	if err != nil {
 		t.Error(err)

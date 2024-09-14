@@ -1,11 +1,11 @@
 package main
-	
+
 import (
-    "os"
-    "fmt"
-	"cheese-lang/internal/tokenizer"
-	"cheese-lang/internal/parser"
 	"cheese-lang/internal/expressions"
+	"cheese-lang/internal/parser"
+	"cheese-lang/internal/tokenizer"
+	"fmt"
+	"os"
 )
 
 func main() {
@@ -27,7 +27,7 @@ func main() {
     source_str := string(source)
     source_str = "{" + source_str + "}"
 
-    tokens, err := tokenizer.Tokenize(source_str)
+    tokens, err := tokenizer.Tokenize(source_str,true)
 
     if err != nil {
         fmt.Printf("error in tokenization: %v",err)
@@ -58,10 +58,17 @@ func main() {
         return
     }
     
-    _, err = main.Code.Evaluate(&global_context,&local_context)
+    return_code, err := main.Code.Evaluate(&global_context,&local_context)
     
     if err != nil {
         fmt.Printf("runtime error: %v",err)
+    }
+    
+    switch return_code.Value.GetVariableType(){
+        case expressions.Mozzarella:
+        fmt.Printf("Program exited with message: %s\n",return_code.Value.(*expressions.MozzarellaVariable).Value)
+        case expressions.Parmesan:
+        fmt.Printf("Program exited with return code: %v\n",return_code.Value.(*expressions.ParmesanVariable).Value)
     }
 
 }

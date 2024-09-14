@@ -5,10 +5,17 @@ import "cheese-lang/internal/expressions"
 type ParserResult struct {
 	Expression expressions.Expression // return of the expression result
 	Error      error                  // error because of malformed input
+    Line uint
+    Colum uint
 }
 
-func MakeParserResult(expression expressions.Expression, error error) ParserResult {
-	return ParserResult{Expression: expression, Error: error}
+func (p *Parser) MakeParserResult(expression expressions.Expression, error error) ParserResult {
+    index := p.IndexTmp
+    if index == len(p.Tokens) {
+        index--
+    }
+    currentToken := p.Tokens[index]
+    return ParserResult{Expression: expression, Error: error, Line: currentToken.Line, Colum: currentToken.Colum}
 }
 
 func (p *Parser) MakeSuccessfulResult(expression expressions.Expression) ParserResult {
@@ -16,13 +23,13 @@ func (p *Parser) MakeSuccessfulResult(expression expressions.Expression) ParserR
 	if advancedTokens == 0 {
 		panic("Trying to make a successful result without advancing the index")
 	}
-	return MakeParserResult(expression, nil)
+	return p.MakeParserResult(expression, nil)
 }
 
 func (p *Parser) MakeUnsuccessfulResult() ParserResult {
-	return MakeParserResult(nil, nil)
+	return p.MakeParserResult(nil, nil)
 }
 
 func (p *Parser) MakeErrorResult(err error) ParserResult {
-	return MakeParserResult(nil, err)
+	return p.MakeParserResult(nil, err)
 }

@@ -1,22 +1,22 @@
 recipe calculateAreaAndPerimeter(Gorgonzola side){
-    taste side < 0 {
+    taste side < 0.0 {
         serve("impossible to calculate the side and area of a negative sided square");
-        prepare 0,0,spoiled;
+        prepare 0, 0, spoiled;
     }
-    return side * side, side * 4.0, fresh;
+    prepare side * side, side * 4.0, fresh;
 }
 
 
 recipe main(){
-    serve("Insert here the side of the square you want to calculate area and perimeter of");
+    serve("Insert here the side of the square you want to calculate area and perimeter of: ");
     Mozzarella input = eat();
     Gorgonzola side = 0.0;
     Milk ok = fresh;
 
     side, ok = m_to_g(input);
     
-    taste !ok {
-        serve("unable to convert the input: " + input " to a Gorgonzola number\n"); 
+    taste ok {
+        serve("unable to convert the input: " + input + " to a Gorgonzola number\n"); 
         prepare -1;
     }
 

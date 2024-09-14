@@ -19,5 +19,5 @@ func (p *Parser) parseBrakeExpression (global bool) ParserResult {
 		return p.MakeErrorResult(errors.Errorf("drain expressions are not allowed in global scope"))
 	}
 
-    return MakeParserResult(&expressions.BrakeExpression{}, nil) 
+    return p.MakeParserResult(&expressions.BrakeExpression{}, nil) 
 }

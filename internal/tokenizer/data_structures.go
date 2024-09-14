@@ -3,6 +3,7 @@ package tokenizer
 type TokenType int
 
 const (
+	NewLineToken TokenType = -2
 	NullToken TokenType = -1
 
 	Identifier TokenType = 0
@@ -136,12 +137,16 @@ func (t TokenType) String() string {
 type Token struct {
 	TokenType TokenType
 	TokenVal  string
+    Line uint
+    Colum uint
 }
 
 func MakeToken(t TokenType) Token {
 	return Token{
 		t,
 		"",
+        0,
+        0,
 	}
 }
 
@@ -149,5 +154,7 @@ func MakeTokenWithMessage(t TokenType, v string) Token {
 	return Token{
 		t,
 		v,
+        0,
+        0,
 	}
 }

@@ -25,5 +25,5 @@ func (p *Parser) parserCuddleExpression (global bool) ParserResult {
         return code
 	}
     
-    return MakeParserResult(&expressions.CuddleExpression{CodeInside: code.Expression}, nil) 
+    return p.MakeParserResult(&expressions.CuddleExpression{CodeInside: code.Expression}, nil) 
 }

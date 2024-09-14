@@ -179,8 +179,8 @@ func (fc *eat ) Evaluate(globalContext *Context, localContext *Context) (Express
 }
 var eatFunction = Function{
     Name: "eat",
-    ArgumentsType: []VariableType{Mozzarella},
-    ArgumentsNames: []string{"x"},
+    ArgumentsType: []VariableType{},
+    ArgumentsNames: []string{},
     Code: &eat{}, 
 }
 

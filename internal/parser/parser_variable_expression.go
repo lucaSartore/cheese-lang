@@ -9,9 +9,9 @@ func (p *Parser) parseVariable(_ bool) ParserResult {
 
     // this item is not an identifier
     if err != nil {
-        return MakeParserResult(nil, nil)
+        return p.MakeParserResult(nil, nil)
     }
 
     expression := expressions.VariableExpression{Name: token.TokenVal}
-    return MakeParserResult(&expression, nil)
+    return p.MakeParserResult(&expression, nil)
 }

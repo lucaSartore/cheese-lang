@@ -3,26 +3,43 @@ package tokenizer
 import (
 	"bytes"
 	"errors"
+	"fmt"
 	"regexp"
 )
+
 
 func Tokenize(input string, exclude_comments bool) ([]Token, error) {
 	// todo: check tat the string is made of only asci characters... utf8 characters may brake this tokenizer
 	inputBuffer := bytes.NewBuffer([]byte(input))
 	tokens := []Token{}
-	for {
-		token, err := TokenizeSingle(inputBuffer)
 
-		if token.TokenType != NullToken && (token.TokenType != Comment || !exclude_comments) {
+    bw := BufferWrapper {
+        input: inputBuffer,
+        bytesRead: 0,
+        currentLine: 0,
+        lastLineBegin: 0,
+    }
+
+	for {
+		token, err := bw.TokenizeSingle()
+
+
+		if token.TokenType != NullToken && token.TokenType != NewLineToken && (token.TokenType != Comment || !exclude_comments) {
+            token.Line = bw.currentLine
+            token.Colum = bw.currentColum()
 			tokens = append(tokens, token)
 		}
+
+        if token.TokenType == NewLineToken{
+            bw.AdvanceOneLine()
+        }
 
 		if inputBuffer.Len() == 0 {
 			break
 		}
 
 		if err != nil {
-			return tokens, err
+            return tokens, fmt.Errorf("tokenizer failed at line %v:%v because of error %v", bw.currentLine, bw.currentColum(), err)
 		}
 	}
 
@@ -30,14 +47,32 @@ func Tokenize(input string, exclude_comments bool) ([]Token, error) {
 	return tokens, nil
 }
 
-func TokenizeSingle(input *bytes.Buffer) (Token, error) {
-	if input.Len() == 0 {
+
+type BufferWrapper struct{
+    input *bytes.Buffer;
+    bytesRead uint;
+    currentLine uint;
+    lastLineBegin uint;
+}
+
+func (b *BufferWrapper) AdvanceOneLine() {
+    b.currentLine += 1
+    b.lastLineBegin = b.bytesRead
+}
+
+func (b *BufferWrapper) currentColum() uint{
+    return b.bytesRead - b.lastLineBegin
+}
+
+func (b *BufferWrapper) TokenizeSingle() (Token, error) {
+	if b.input.Len() == 0 {
 		return MakeToken(NullToken), nil
 	}
-	inputBytes := input.Bytes()
+	inputBytes := b.input.Bytes()
 
 	functionToTry := []func([]byte) (Token, uint){
 		AdvanceWitheSpace,
+        AdvanceNewLine,
 		TryReadComment,
 		TryReadDualCharacterToken,
 		TryReadSingleCharacterToken,
@@ -49,18 +84,43 @@ func TokenizeSingle(input *bytes.Buffer) (Token, error) {
 	for _, function := range functionToTry {
 		token, len := function(inputBytes)
 		if len > 0 {
+            b.bytesRead += len
 			buffer := make([]byte, len)
-			input.Read(buffer)
+            b.input.Read(buffer)
 			return token, nil
 		}
 	}
 	return MakeToken(NullToken), errors.New("unable to find token that match with: " + string(inputBytes))
 }
 
+
+func AdvanceNewLine(input []byte) (Token, uint) {
+    var c1 byte = 0
+    var c2 byte = 0
+
+    if len(input) != 0{
+        c1 = input[0]
+
+        if len(input) >= 2{
+            c2 = input[1]
+        }
+    }
+
+    if c1 == '\n' {
+	    return MakeToken(NewLineToken), 1
+    }
+
+    if c1 == '\r' && c2 == '\n'{
+        return MakeToken(NewLineToken), 2
+    }
+
+	return MakeToken(NullToken), 0
+}
+
 func AdvanceWitheSpace(input []byte) (Token, uint) {
 	count := uint(0)
 	for _, b := range input {
-		if b == ' ' || b == '\t' || b == '\n' || b == '\r'{
+		if b == ' ' || b == '\t'{
 			count++
 		} else {
 			break

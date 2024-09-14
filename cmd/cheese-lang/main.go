@@ -38,7 +38,7 @@ func main() {
     parsed_code := p.ParseAnything(true)  
     
     if parsed_code.Error != nil {
-        fmt.Printf("unable to parse the code because of error: %v",parsed_code.Error)
+        fmt.Printf("unable to parse the code at line %v:%v because of error: %v", parsed_code.Line, parsed_code.Colum, parsed_code.Error)
         return
     }
 

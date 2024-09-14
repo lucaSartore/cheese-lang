@@ -10,7 +10,7 @@
             "request": "launch",
             "mode": "debug",
             "program": "./cmd/cheese-lang/main.go",
-            "args": ["./examples/io.cl"],
+            "args": ["./examples/factorial.cl"],
         },
         {
             "name": "Launch test",

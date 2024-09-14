@@ -32,7 +32,7 @@ func (p *Parser) parseCodeExpression(global bool) ParserResult {
 		}
 
 		if parseResult.Expression == nil {
-			break
+			return p.MakeErrorResult(errors.Errorf("unable to parse any valid token"))
 		}
 
 		newExpression := parseResult.Expression

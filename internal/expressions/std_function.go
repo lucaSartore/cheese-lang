@@ -1,17 +1,17 @@
 package expressions
 
 import (
-      "fmt"
-      "strconv"
-      "bufio"
-      "os"
+	"bufio"
+	"fmt"
+	"os"
+	"strconv"
 )
 
 
 type ActionFunction[T VariableContainer] func(T) (VariableContainer, error)
 
-func Wrapper[T VariableContainer](action ActionFunction[T], context *Context, inputName string)(ExpressionResult, error){
-    x, ok := context.GetVariable(inputName)
+func GetVariableOrPanic[T VariableContainer] (context *Context, name string) T {
+    x, ok := context.GetVariable(name)
     // if everything is done correctly in the setup stage there should be no possibility to fail this 2 checks
     if !ok {
         panic("std  function assertion fail 1") 
@@ -20,7 +20,12 @@ func Wrapper[T VariableContainer](action ActionFunction[T], context *Context, in
     if ! ok {
         panic("std function assertion fail 2")
     }
-    res, err := action(cast) 
+    return cast
+}
+
+func Wrapper[T VariableContainer](action ActionFunction[T], context *Context, inputName string)(ExpressionResult, error){
+    variable := GetVariableOrPanic[T](context, inputName)
+    res, err := action(variable) 
     if err != nil {
         return NullExpressionResult, err
     }
@@ -188,6 +193,51 @@ var eatFunction = Function{
     Code: &eat{}, 
 }
 
-var StandardLibraryFunctions = []Function{parmesanToGorgonzolaFunc,parmesanToMozzarellaFunc,gorgonzolaToParmesanFunc,gorgonzolaToMozzarellaFunc, mozzarellaToGorgonzolaFunc, mozzarellaToParmesanFunc,serveFunction, eatFunction}
+type weight struct{}
+func (fc *weight ) Evaluate(globalContext *Context, localContext *Context) (ExpressionResult, error) {
+    return Wrapper(
+        func(v *MozzarellaVariable) (VariableContainer, error) {
+            fmt.Print(v.Value)
+            return &ParmesanVariable{len(v.Value)}, nil
+        },
+        localContext,
+        "x",
+    )
+}
+var weightFunction = Function{
+    Name: "weight",
+    ArgumentsType: []VariableType{Mozzarella},
+    ArgumentsNames: []string{"x"},
+    Code: &serve{}, 
+}
+
+type slice struct{}
+func (fc *slice) Evaluate(globalContext *Context, localContext *Context) (ExpressionResult, error) {
+    input := GetVariableOrPanic[*MozzarellaVariable](localContext,"input").Value
+    start := GetVariableOrPanic[*ParmesanVariable](localContext,"start").Value
+    end := GetVariableOrPanic[*ParmesanVariable](localContext,"end").Value
+    
+    if start < 0 {
+        return NullExpressionResult, fmt.Errorf("start must be greater than 0")
+    }
+
+    if end < start {
+        return NullExpressionResult, fmt.Errorf("end shall not be smaller than start")
+    }
+
+    if end >= len(input) {
+        return NullExpressionResult, fmt.Errorf("end shall not be greater than the mozzarella string itself")
+    }
+
+    return ExpressionResult{Value: &MozzarellaVariable{Value: input[start:end]}, Return: true, Brake: false}, nil
+}
+var sliceFunction = Function{
+    Name: "slice",
+    ArgumentsType: []VariableType{Mozzarella, Parmesan, Parmesan},
+    ArgumentsNames: []string{"input", "start", "end"},
+    Code: &eat{}, 
+}
+
+var StandardLibraryFunctions = []Function{parmesanToGorgonzolaFunc,parmesanToMozzarellaFunc,gorgonzolaToParmesanFunc,gorgonzolaToMozzarellaFunc, mozzarellaToGorgonzolaFunc, mozzarellaToParmesanFunc,serveFunction, eatFunction, weightFunction, sliceFunction}
 
 

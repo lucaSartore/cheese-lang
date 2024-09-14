@@ -1,7 +1,21 @@
 # &#129472; &#129472; &#129472; cheese-lang (Linguaggio Formaggio) &#129472; &#129472; &#129472; 
 
-cheese-lang (or Linguaggio Formaggio in Italian)is a statically typed, interpreted language with a runtime
+cheese-lang (or Linguaggio Formaggio in Italian) is a statically typed, interpreted language with a runtime
 written in go.
+
+## How and Why
+
+This is obviously not meant to be a serious language, is an exercise to learn mora about GO and language design.
+
+This dose not mean that is useless, it is a fully functional Touring complete language that you can use to write simple console application.
+
+### examples
+inside the folder [examples](./examples) you are albe to find a few basic program that use all the features of the language.
+
+To run an example you can use:
+```bash
+go run cmd/cheese-lang/main.go examples/string_search.cl
+```
 
 ## Language specification
 

@@ -1,8 +1,10 @@
 package expressions
 
 import (
-    "fmt"
-    "strconv"
+      "fmt"
+      "strconv"
+      "bufio"
+      "os"
 )
 
 
@@ -165,5 +167,23 @@ var serveFunction = Function{
     Code: &serve{}, 
 }
 
+var reader = bufio.NewReader(os.Stdin)
 
-var StandardLibraryFunctions = []Function{parmesanToGorgonzolaFunc,parmesanToMozzarellaFunc,gorgonzolaToParmesanFunc,gorgonzolaToMozzarellaFunc, mozzarellaToGorgonzolaFunc, mozzarellaToParmesanFunc,serveFunction}
+type eat struct{}
+func (fc *eat ) Evaluate(globalContext *Context, localContext *Context) (ExpressionResult, error) {
+    text, err := reader.ReadString('\n')   
+    if err != nil {
+        return NullExpressionResult, err
+    }
+    return ExpressionResult{Value: &MozzarellaVariable{Value: text},Return: true, Brake: false}, nil
+}
+var eatFunction = Function{
+    Name: "eat",
+    ArgumentsType: []VariableType{Mozzarella},
+    ArgumentsNames: []string{"x"},
+    Code: &eat{}, 
+}
+
+var StandardLibraryFunctions = []Function{parmesanToGorgonzolaFunc,parmesanToMozzarellaFunc,gorgonzolaToParmesanFunc,gorgonzolaToMozzarellaFunc, mozzarellaToGorgonzolaFunc, mozzarellaToParmesanFunc,serveFunction, eatFunction}
+
+

@@ -111,6 +111,7 @@ recipe Fondue(){
     prepare;
 };
 
+```
 ### Type operations
 
 - `Parmesan`:

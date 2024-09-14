@@ -175,6 +175,10 @@ func (fc *eat ) Evaluate(globalContext *Context, localContext *Context) (Express
     if err != nil {
         return NullExpressionResult, err
     }
+    text = text[0:len(text)-1]
+    if len(text) != 0 && text[len(text)-1] == '\r'{
+        text = text[0:len(text)-1]
+    }
     return ExpressionResult{Value: &MozzarellaVariable{Value: text},Return: true, Brake: false}, nil
 }
 var eatFunction = Function{

@@ -15,7 +15,7 @@ recipe main(){
 
     side, ok = m_to_g(input);
     
-    taste ok {
+    taste !ok {
         serve("unable to convert the input: " + input + " to a Gorgonzola number\n"); 
         prepare -1;
     }
@@ -30,7 +30,4 @@ recipe main(){
     }
 
     serve(" a square with a side of " + input + " has an area of: " + g_to_m(area) + " and a perimeter of: " + g_to_m(perimeter));
-
-    prepare 0;
 }
-

@@ -62,6 +62,7 @@ func main() {
     
     if err != nil {
         fmt.Printf("runtime error: %v",err)
+        return
     }
     
     switch return_code.Value.GetVariableType(){
@@ -69,6 +70,7 @@ func main() {
         fmt.Printf("Program exited with message: %s\n",return_code.Value.(*expressions.MozzarellaVariable).Value)
         case expressions.Parmesan:
         fmt.Printf("Program exited with return code: %v\n",return_code.Value.(*expressions.ParmesanVariable).Value)
+        default:
     }
 
 }

@@ -36,8 +36,9 @@ func (p *Parser) parseOneToOneOperator(global bool) ParserResult {
     var function func(expressions.VariableContainer) (expressions.VariableContainer, error) = nil
 
     for _, op := range OneToOneOperators{
-        if op.OperatorToken == op.OperatorToken{
+        if operator.TokenType == op.OperatorToken{
             function = op.OperatorFunc
+            break
         }
     }
 

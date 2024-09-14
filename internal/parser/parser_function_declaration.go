@@ -35,6 +35,7 @@ func (p *Parser) ParseFunctionDeclaration(global bool) ParserResult {
 		    return p.MakeErrorResult(errors.Errorf("expected value after operator"))
         }
 
+
         arg_type_token, err := p.ReadNextToken()
 
         if err != nil{
@@ -62,6 +63,9 @@ func (p *Parser) ParseFunctionDeclaration(global bool) ParserResult {
             panic("assertion 2 failed in function declaration parser")
         }
 
+        if p.NextTokenMatch(tokenizer.Comma){
+            p.ReadNextToken()
+        }
     }
 
     _, err = p.ExpectReedNextToken(tokenizer.CloseBracket)

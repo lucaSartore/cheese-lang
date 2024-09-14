@@ -42,8 +42,8 @@ func main() {
         return
     }
 
-    local_context := expressions.MakeContextWithStd()
-    global_context := expressions.MakeContext()
+    local_context := expressions.MakeContext()
+    global_context := expressions.MakeContextWithStd()
     
     _, err = parsed_code.Expression.Evaluate(&global_context, &local_context)
 

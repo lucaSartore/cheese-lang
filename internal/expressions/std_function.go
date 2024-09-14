@@ -197,7 +197,6 @@ type weight struct{}
 func (fc *weight ) Evaluate(globalContext *Context, localContext *Context) (ExpressionResult, error) {
     return Wrapper(
         func(v *MozzarellaVariable) (VariableContainer, error) {
-            fmt.Print(v.Value)
             return &ParmesanVariable{len(v.Value)}, nil
         },
         localContext,
@@ -208,7 +207,7 @@ var weightFunction = Function{
     Name: "weight",
     ArgumentsType: []VariableType{Mozzarella},
     ArgumentsNames: []string{"x"},
-    Code: &serve{}, 
+    Code: &weight{}, 
 }
 
 type slice struct{}
@@ -225,7 +224,7 @@ func (fc *slice) Evaluate(globalContext *Context, localContext *Context) (Expres
         return NullExpressionResult, fmt.Errorf("end shall not be smaller than start")
     }
 
-    if end >= len(input) {
+    if end > len(input) {
         return NullExpressionResult, fmt.Errorf("end shall not be greater than the mozzarella string itself")
     }
 
@@ -235,7 +234,7 @@ var sliceFunction = Function{
     Name: "slice",
     ArgumentsType: []VariableType{Mozzarella, Parmesan, Parmesan},
     ArgumentsNames: []string{"input", "start", "end"},
-    Code: &eat{}, 
+    Code: &slice{}, 
 }
 
 var StandardLibraryFunctions = []Function{parmesanToGorgonzolaFunc,parmesanToMozzarellaFunc,gorgonzolaToParmesanFunc,gorgonzolaToMozzarellaFunc, mozzarellaToGorgonzolaFunc, mozzarellaToParmesanFunc,serveFunction, eatFunction, weightFunction, sliceFunction}

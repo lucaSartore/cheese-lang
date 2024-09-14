@@ -25,7 +25,7 @@ func EqualOperator(v1 expressions.VariableContainer, v2 expressions.VariableCont
 	}
 
 	value7, ok1 := v1.(*expressions.MozzarellaVariable)
-	value8, ok2 := v1.(*expressions.MozzarellaVariable)
+	value8, ok2 := v2.(*expressions.MozzarellaVariable)
 	if ok1 && ok2 {
 		return &expressions.MilkVariable{Value: value7.Value == value8.Value}, nil
 	}
